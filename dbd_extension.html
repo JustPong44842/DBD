@@ -17,21 +17,25 @@
         .financial-table th {
             background-color: #0f172a;
             color: #ffffff;
-            font-size: 11px;
-            padding: 6px 8px;
+            font-size: 9px;
+            padding: 4px 6px;
             border: 1px solid #cbd5e1;
             text-align: center;
         }
         .financial-table td {
-            font-size: 11px;
-            padding: 5px 8px;
+            font-size: 9px;
+            padding: 3px 6px;
             border: 1px solid #cbd5e1;
             text-align: right;
         }
         .financial-table .row-title {
             text-align: left;
-            font-weight: 500;
+            font-weight: 600;
             background-color: #f8fafc;
+            font-size: 9px;
+            line-height: 1.2;
+            white-space: normal;
+            word-break: break-word;
         }
         .financial-table tr:hover td {
             background-color: #f1f5f9;
@@ -117,7 +121,7 @@
                         กรุณาลบ Bookmarklet ตัวเก่าออก แล้วจับปุ่มสีม่วงนี้ลากขึ้นไปปล่อยที่ <b>"แถบบุ๊กมาร์ก"</b> อีกครั้ง เพื่อรองรับการดึงตารางแบบไม่คัดย่อ
                     </p>
                     
-                    <a href="javascript:(function(){var companyNameEl=document.querySelector('h3');var companyIdEl=document.querySelector('h4');var companyName=companyNameEl?companyNameEl.innerText.replace('ชื่อนิติบุคคล :','').trim():'ไม่พบชื่อ';var companyId=companyIdEl?companyIdEl.innerText.replace('เลขทะเบียนนิติบุคคล :','').trim():'0000000000000';var table=document.querySelector('table.table-hover');if(!table){alert('❌ ไม่พบตารางข้อมูลงบการเงินในหน้านี้ กรุณารอให้ตารางแสดงผลเสร็จสิ้นก่อนครับ');return;}var activeMenu=document.querySelector('.finMenu.active');var sheetType=activeMenu?activeMenu.innerText.trim():'';if(!sheetType){if(table.innerText.includes('สินทรัพย์รวม')){sheetType='งบแสดงฐานะการเงิน';}else if(table.innerText.includes('รายได้รวม')){sheetType='งบกำไรขาดทุน';}else{sheetType='งบการเงิน';}}var headers=[];var headerRows=table.querySelectorAll('thead tr');if(headerRows.length>0){headerRows.forEach(function(row){var cols=row.querySelectorAll('th, td');cols.forEach(function(col){var text=col.textContent.trim().replace(/\s+/g,'');var match=text.match(/\b\d{4}\b/);if(match){var yr=parseInt(match[0]);if(headers.indexOf(yr)===-1){headers.push(yr);}}});});}var rows=table.querySelectorAll('tbody tr');var currentSheetData={};rows.forEach(function(row){var titleEl=row.querySelector('th, td.text-start, td:nth-child(1)');if(!titleEl)return;var title=titleEl.innerText.trim();if(!title||title.includes('รวม')&&row.classList.contains('bg-slate-100')){}var cells=row.querySelectorAll('td');var values=[];cells.forEach(function(cell,idx){if(cells.length>1&&idx===0)return;var txt=cell.innerText.trim().replace(/,/g,'');var val=parseFloat(txt);if(isNaN(val)){values.push('0.00');}else{values.push(txt);}});if(title&&values.length>0){currentSheetData[title]=values;}});var payload={companyName:companyName,companyId:companyId,years:headers,sheetType:sheetType,data:currentSheetData};var dataStr=JSON.stringify({action:'DBD_SCRAPED',payload:payload});navigator.clipboard.writeText(dataStr).then(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! ข้อมูลถูกส่งเข้าส่วนขยายอัตโนมัติแล้ว');}catch(e){alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูลจากคลิปบอร์ด');}}else{alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูลจากคลิปบอร์ด');}}).catch(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');alert('⚡ ดึงข้อมูลสำเร็จ! ส่งเข้าแอปหลักอัตโนมัติ (แต่ไม่สามารถคัดลอกลงคลิปบอร์ดได้)');}catch(e){alert('❌ ดึงข้อมูลล้มเหลว');}}else{alert('❌ ไม่พบคลิปบอร์ดและลิงก์เปิด');}});})();" 
+                    <a href="javascript:(function(){var companyNameEl=document.querySelector('h3');var companyIdEl=document.querySelector('h4');var companyName=companyNameEl?companyNameEl.innerText.replace('ชื่อนิติบุคคล :','').trim():'ไม่พบชื่อ';var companyId=companyIdEl?companyIdEl.innerText.replace('เลขทะเบียนนิติบุคคล :','').trim():'0000000000000';var table=document.querySelector('table.table-hover');if(!table){alert('❌ ไม่พบตารางข้อมูลงบการเงินในหน้านี้ กรุณารอให้ตารางแสดงผลเสร็จสิ้นก่อนครับ');return;}var activeMenu=document.querySelector('.finMenu.active');var sheetType=activeMenu?activeMenu.innerText.trim():'';if(!sheetType){if(table.innerText.includes('สินทรัพย์รวม')){sheetType='งบแสดงฐานะการเงิน';}else if(table.innerText.includes('รายได้รวม')){sheetType='งบกำไรขาดทุน';}else{sheetType='งบการเงิน';}}var headers=[];var headerRows=table.querySelectorAll('thead tr');if(headerRows.length>0){headerRows.forEach(function(row){var cols=row.querySelectorAll('th, td');cols.forEach(function(col){var text=col.textContent.trim().replace(/\s+/g,'');var match=text.match(/\b\d{4}\b/);if(match){var yr=parseInt(match[0]);if(headers.indexOf(yr)===-1){headers.push(yr);}}});});}var rows=table.querySelectorAll('tbody tr');var currentSheetData={};rows.forEach(function(row){var titleEl=row.querySelector('th, td.text-start, td:nth-child(1)');if(!titleEl)return;var title=titleEl.innerText.trim();if(!title||title.includes('รวม')&&row.classList.contains('bg-slate-100')){}var cells=row.querySelectorAll('td');var values=[];cells.forEach(function(cell,idx){if(cell===titleEl)return;var txt=cell.innerText.trim().replace(/,/g,'');var val=parseFloat(txt);if(isNaN(val)){values.push('0.00');}else{values.push(txt);}});if(title&&values.length>0){currentSheetData[title]=values;}});var payload={companyName:companyName,companyId:companyId,years:headers,sheetType:sheetType,data:currentSheetData};var dataStr=JSON.stringify({action:'DBD_SCRAPED',payload:payload});var showToast=function(m){var e=document.createElement('div');e.style.position='fixed';e.style.top='50%';e.style.left='50%';e.style.transform='translate(-50%,-50%)';e.style.backgroundColor='rgba(15,23,42,0.95)';e.style.color='#FFF';e.style.padding='16px 28px';e.style.borderRadius='12px';e.style.boxShadow='0 25px 50px -12px rgba(0,0,0,0.5)';e.style.zIndex='999999';e.style.fontSize='14px';e.style.fontWeight='bold';e.style.fontFamily='sans-serif';e.style.textAlign='center';e.style.transition='opacity 0.4s ease';e.innerHTML='<div style=\"font-size:24px;margin-bottom:8px;\">⚡</div>'+m;document.body.appendChild(e);setTimeout(function(){e.style.opacity='0';setTimeout(function(){document.body.removeChild(e);},400);},2000);};navigator.clipboard.writeText(dataStr).then(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ!<br><span style=\"font-size:11px;font-weight:normal;color:#94A3B8;\">ข้อมูลถูกส่งเข้าส่วนขยายอัตโนมัติเรียบร้อย</span>');}catch(e){showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ!<br><span style=\"font-size:11px;font-weight:normal;color:#94A3B8;\">กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูล</span>');}}else{showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ!<br><span style=\"font-size:11px;font-weight:normal;color:#94A3B8;\">กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูล</span>');}}).catch(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลสำเร็จ แต่คัดลอกลงคลิปบอร์ดไม่ได้');}catch(e){alert('❌ ดึงข้อมูลล้มเหลว');}}else{alert('❌ ไม่พบคลิปบอร์ดและลิงก์เปิด');}});})();" 
                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition-all inline-flex items-center justify-center gap-1.5 cursor-grab shadow-md select-none text-center animate-pulse"
                        onclick="alert('กรุณาคลิกค้างที่ปุ่มนี้ แล้วลากขึ้นไปวางไว้บน แถบบุ๊กมาร์ก (Bookmarks Bar) ของเบราว์เซอร์ครับ!'); return false;">
                         ➡️ ลากปุ่มนี้ไปวางที่แถบบุ๊กมาร์ก (เวอร์ชันเต็ม) 📊
@@ -139,6 +143,9 @@
                     </div>
                     <button onclick="pasteFromClipboard()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-6 rounded-xl text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-print border border-emerald-500 hover:scale-[1.02] active:scale-[0.98] select-none cursor-pointer">
                         📋 วางข้อมูลจากคลิปบอร์ด (กรณีรันบนคอมตัวเอง)
+                    </button>
+                    <button onclick="resetCompanyData()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 no-print border border-rose-500 hover:scale-[1.01] active:scale-[0.99] select-none cursor-pointer">
+                        🗑️ รีเซ็ตหน้ากระดาษ (ล้างค่าข้อมูล)
                     </button>
                 </div>
 
@@ -343,8 +350,8 @@
                     document.getElementById("companyName").innerText = urlCompanyName;
                     document.getElementById("targetCompanyId").value = "";
                 }
-            } else if (appDatabase.length > 0) {
-                loadCompanyData(appDatabase[0].companyId);
+            } else {
+                resetCompanyData();
             }
             
             setupPostMessageReceiver();
@@ -427,7 +434,7 @@
             const years = comp.years && comp.years.length > 0 ? comp.years : [2562, 2563, 2564, 2565, 2566];
             
             // Build Table Headers dynamically
-            let headerHtml = `<tr><th rowspan="2" class="text-left py-2 px-3 align-middle bg-slate-900 text-white font-bold border border-slate-700">รายการแถวตรวจงบฉบับเต็ม</th>`;
+            let headerHtml = `<tr><th rowspan="2" class="text-left py-2 px-3 align-middle bg-slate-900 text-white font-bold border border-slate-700 min-w-[210px] w-[28%]">รายการแถวตรวจงบฉบับเต็ม</th>`;
             years.forEach((yr, idx) => {
                 const colSpan = idx === 0 ? 1 : 2;
                 headerHtml += `<th colspan="${colSpan}" class="text-center py-1 bg-slate-900 text-white font-bold border border-slate-700">ปี พ.ศ. ${yr}</th>`;
@@ -529,75 +536,156 @@
             let score = 0;
             const latestIdx = years.length - 1;
 
-            // 1. ตรวจสอบการไม่ส่งงบ / ขาดส่งงบปีล่าสุด
-            const currentYearThai = new Date().getFullYear() + 543;
-            const expectedLatestYear = currentYearThai - 2; // เช่น ปัจจุบัน 2569 คาดหวังอย่างน้อย 2567
-            const latestSubmittedYear = years && years.length > 0 ? years[years.length - 1] : null;
-
             if (Object.keys(comp.balanceSheet).length === 0 && Object.keys(comp.incomeStatement).length === 0) {
                 warnings.push(`🚨 <b>ไม่พบข้อมูลงบการเงิน:</b> กิจการนี้ยังไม่มีประวัติการนำส่งงบการเงินใด ๆ เข้าระบบคลังข้อมูล DBD`);
                 score += 50;
-            } else if (latestSubmittedYear && latestSubmittedYear < expectedLatestYear) {
-                warnings.push(`⚠️ <b>ขาดการนำส่งงบการเงินล่าสุด:</b> งบการเงินปีล่าสุดที่ส่งคือ พ.ศ. ${latestSubmittedYear} (ไม่มีข้อมูลงบของปี พ.ศ. ${expectedLatestYear} - ${currentYearThai - 1})`);
-                score += 25;
-            }
-
-            // 2. ค้นหาคีย์ที่มีคำว่าส่วนของผู้ถือหุ้น เพื่อเช็กทุนติดลบ
-            const equityKey = Object.keys(comp.balanceSheet).find(k => k.includes("ส่วนของผู้ถือหุ้น") && !k.includes("รวม"));
-            if (equityKey) {
-                const vals = comp.balanceSheet[equityKey];
-                const latestVal = vals[latestIdx];
-                if(latestVal && parseFloat(latestVal.replace(/,/g, '')) < 0) {
-                    warnings.push(`🚨 <b>สภาวะทุนติดลบ (หนี้สินล้นพ้นตัว):</b> รายการ "${equityKey}" ต่ำกว่าศูนย์ (${latestVal} บาท) มีความเสี่ยงขั้นวิกฤต`);
-                    score += 50;
+            } else {
+                // 1. ตรวจสอบการไม่ส่งงบปีล่าสุดตามเกณฑ์กรมพัฒนาธุรกิจการค้า
+                const currentYearThai = new Date().getFullYear() + 543;
+                const expectedLatestYear = currentYearThai - 2; 
+                const latestSubmittedYear = years && years.length > 0 ? years[years.length - 1] : null;
+                if (latestSubmittedYear && latestSubmittedYear < expectedLatestYear) {
+                    warnings.push(`⚠️ <b>ไม่ส่งงบปีล่าสุดตามเกณฑ์กรมพัฒนาธุรกิจการค้า:</b> งบปีล่าสุดที่ส่งคือ พ.ศ. ${latestSubmittedYear} (ขาดงบปี พ.ศ. ${expectedLatestYear})`);
+                    score += 25;
                 }
-            }
 
-            // 3. ค้นหาคีย์ที่มีคำว่ากำไรขาดทุนสุทธิ เพื่อเช็กการขาดทุนต่อเนื่อง
-            const netProfitKey = Object.keys(comp.incomeStatement).find(k => k.includes("กำไร (ขาดทุน) สุทธิ") || k.includes("กำไรสุทธิ") || k.includes("ขาดทุนสุทธิ"));
-            if (netProfitKey) {
-                const vals = comp.incomeStatement[netProfitKey];
-                if (vals && vals.length >= 3) {
-                    let isLossStreak = true;
-                    let trail = [];
-                    for(let i=0; i<3; i++) {
-                        let num = parseFloat(vals[i]?.replace(/,/g, '') || 0);
-                        trail.push(vals[i]);
-                        if (num >= 0) isLossStreak = false;
-                    }
-                    if(isLossStreak) {
-                        warnings.push(`⚠️ <b>ผลประกอบการขาดทุนสะสมต่อเนื่อง:</b> ขาดทุนสุทธิติดต่อกัน 3 ปีย้อนหลัง (${trail.join(" → ")} บาท)`);
-                        score += 30;
-                    }
-                }
-            }
+                // 2. บริษัทขาดทุนต่อเนื่องเกิน 2 ปี
+                const netProfitKey = Object.keys(comp.incomeStatement).find(k => {
+                    const cleanK = k.replace(/\s+/g, '');
+                    return cleanK.includes("กำไร(ขาดทุน)สุทธิ") || cleanK.includes("กำไรสุทธิ") || cleanK.includes("ขาดทุนสุทธิ");
+                });
+                if (netProfitKey) {
+                    const vals = comp.incomeStatement[netProfitKey] || [];
+                    const profitAmounts = [];
+                    years.forEach((yr, idx) => {
+                        let amtStr = idx === 0 ? vals[0] : vals[2 * idx - 1];
+                        if (amtStr !== undefined && amtStr !== "-") {
+                            profitAmounts.push(parseFloat(amtStr.replace(/,/g, '')));
+                        } else {
+                            profitAmounts.push(0);
+                        }
+                    });
 
-            // 4. ตรวจสอบแนวโน้มสินทรัพย์รวมลดลงต่อเนื่อง 3 ปี
-            const assetsKey = Object.keys(comp.balanceSheet).find(k => k.includes("สินทรัพย์รวม"));
-            if (assetsKey) {
-                const vals = comp.balanceSheet[assetsKey];
-                if (vals && vals.length >= 3) {
-                    const v0 = parseFloat(vals[0]?.replace(/,/g, '') || 0);
-                    const v1 = parseFloat(vals[1]?.replace(/,/g, '') || 0);
-                    const v2 = parseFloat(vals[2]?.replace(/,/g, '') || 0);
-                    if (v2 < v1 && v1 < v0) {
-                        warnings.push(`⚠️ <b>มูลค่าสินทรัพย์รวมลดลงต่อเนื่อง:</b> ขนาดทรัพย์สินหดตัวติดต่อกัน 3 ปี (${formatNumberStr(vals[0])} → ${formatNumberStr(vals[1])} → ${formatNumberStr(vals[2])} บาท)`);
-                        score += 15;
+                    if (profitAmounts.length >= 2) {
+                        const latestProfit = profitAmounts[profitAmounts.length - 1];
+                        const prevProfit = profitAmounts[profitAmounts.length - 2];
+                        if (latestProfit < 0 && prevProfit < 0) {
+                            warnings.push(`🚨 <b>บริษัทขาดทุนสะสมต่อเนื่องเกิน 2 ปี:</b> ผลประกอบการติดลบติดต่อกัน 2 ปีล่าสุด (${latestProfit.toLocaleString('th-TH')} และ ${prevProfit.toLocaleString('th-TH')} บาท)`);
+                            score += 30;
+                        }
                     }
                 }
-            }
 
-            // 5. ตรวจสอบแนวโน้มรายได้รวมลดลงต่อเนื่อง 3 ปี
-            const revenueKey = Object.keys(comp.incomeStatement).find(k => k.includes("รายได้รวม") || k.includes("รายได้จากการขาย"));
-            if (revenueKey) {
-                const vals = comp.incomeStatement[revenueKey];
-                if (vals && vals.length >= 3) {
-                    const v0 = parseFloat(vals[0]?.replace(/,/g, '') || 0);
-                    const v1 = parseFloat(vals[1]?.replace(/,/g, '') || 0);
-                    const v2 = parseFloat(vals[2]?.replace(/,/g, '') || 0);
-                    if (v2 < v1 && v1 < v0) {
-                        warnings.push(`⚠️ <b>รายได้ของกิจการลดลงต่อเนื่อง:</b> รายได้หดตัวติดต่อกัน 3 ปี (${formatNumberStr(vals[0])} → ${formatNumberStr(vals[1])} → ${formatNumberStr(vals[2])} บาท)`);
-                        score += 15;
+                // 3. ส่วนของผู้ถือหุ้นติดลบ (ส่วนผู้ถือหุ้นติดลบ)
+                const equityKey = Object.keys(comp.balanceSheet).find(k => {
+                    const cleanK = k.replace(/\s+/g, '');
+                    return cleanK.includes("ส่วนของผู้ถือหุ้น") && !cleanK.includes("รวม");
+                });
+                if (equityKey) {
+                    const vals = comp.balanceSheet[equityKey] || [];
+                    let latestEquityVal = "-";
+                    if (latestIdx === 0) {
+                        latestEquityVal = vals[0];
+                    } else {
+                        latestEquityVal = vals[2 * latestIdx - 1];
+                    }
+                    
+                    if (latestEquityVal && latestEquityVal !== "-") {
+                        const latestEquityNum = parseFloat(latestEquityVal.replace(/,/g, ''));
+                        if (latestEquityNum < 0) {
+                            warnings.push(`🚨 <b>ส่วนผู้ถือหุ้นติดลบ (ทุนติดลบ):</b> สินทรัพย์สุทธิของกิจการต่ำกว่าศูนย์ (${latestEquityNum.toLocaleString('th-TH')} บาท) เสี่ยงล้มละลาย`);
+                            score += 40;
+                        }
+                    }
+                }
+
+                // 4. รายได้หลัก = 0
+                const mainRevenueKey = Object.keys(comp.incomeStatement).find(k => {
+                    const cleanK = k.replace(/\s+/g, '');
+                    return cleanK.includes("รายได้หลัก") || cleanK.includes("รายได้จากการขาย");
+                });
+                if (mainRevenueKey) {
+                    const vals = comp.incomeStatement[mainRevenueKey] || [];
+                    let latestRevVal = "-";
+                    if (latestIdx === 0) {
+                        latestRevVal = vals[0];
+                    } else {
+                        latestRevVal = vals[2 * latestIdx - 1];
+                    }
+                    if (latestRevVal && latestRevVal !== "-") {
+                        const latestRevNum = parseFloat(latestRevVal.replace(/,/g, ''));
+                        if (latestRevNum === 0) {
+                            warnings.push(`🚨 <b>รายได้หลักเท่ากับศูนย์ (รายได้หลัก = 0):</b> ไม่มีรายรับจากการดำเนินธุรกิจหลักในรอบปีบัญชีล่าสุด`);
+                            score += 20;
+                        }
+                    }
+                }
+
+                // 5. ค่าใช้จ่ายในการขายและบริหารน้อยผิดปกติ
+                const sgaKey = Object.keys(comp.incomeStatement).find(k => {
+                    const cleanK = k.replace(/\s+/g, '');
+                    return cleanK.includes("ขายและบริหาร") || cleanK.includes("ค่าใช้จ่ายในการดำเนินงาน");
+                });
+                if (sgaKey) {
+                    const vals = comp.incomeStatement[sgaKey] || [];
+                    let latestSgaVal = "-";
+                    if (latestIdx === 0) {
+                        latestSgaVal = vals[0];
+                    } else {
+                        latestSgaVal = vals[2 * latestIdx - 1];
+                    }
+                    if (latestSgaVal && latestSgaVal !== "-") {
+                        const latestSgaNum = parseFloat(latestSgaVal.replace(/,/g, ''));
+                        if (latestSgaNum <= 1) {
+                            warnings.push(`⚠️ <b>ค่าใช้จ่ายในการขายและบริหารน้อยผิดปกติ:</b> มีรายจ่ายหมวดบริหารต่ำกว่าเกณฑ์การดำเนินธุรกิจจริง (${latestSgaNum.toLocaleString('th-TH')} บาท)`);
+                            score += 15;
+                        }
+                    }
+                }
+
+                // 6. บริษัทเพิ่งเปิดกิจการยังไม่ถึง 2 ปี
+                if (years && years.length < 2) {
+                    warnings.push(`⚠️ <b>บริษัทเพิ่งเปิดกิจการยังไม่ถึง 2 ปี:</b> มีข้อมูลการเงินย้อนหลังเข้าระบบน้อยกว่า 2 ปีการทำงาน`);
+                    score += 15;
+                }
+
+                // แนวโน้มสินทรัพย์ลดลง 3 ปี
+                const assetsKey = Object.keys(comp.balanceSheet).find(k => k.includes("สินทรัพย์รวม"));
+                if (assetsKey) {
+                    const vals = comp.balanceSheet[assetsKey] || [];
+                    const assetAmounts = [];
+                    years.forEach((yr, idx) => {
+                        let amtStr = idx === 0 ? vals[0] : vals[2 * idx - 1];
+                        if (amtStr && amtStr !== "-") assetAmounts.push(parseFloat(amtStr.replace(/,/g, '')));
+                    });
+                    if (assetAmounts.length >= 3) {
+                        const v0 = assetAmounts[assetAmounts.length - 3];
+                        const v1 = assetAmounts[assetAmounts.length - 2];
+                        const v2 = assetAmounts[assetAmounts.length - 1];
+                        if (v2 < v1 && v1 < v0) {
+                            warnings.push(`⚠️ <b>มูลค่าสินทรัพย์รวมลดลงต่อเนื่อง 3 ปี:</b> ขนาดทรัพย์สินรวมหดตัวติดต่อกัน (${formatNumberStr(vals[vals.length - 5])} → ${formatNumberStr(vals[vals.length - 3])} → ${formatNumberStr(vals[vals.length - 1])} บาท)`);
+                            score += 10;
+                        }
+                    }
+                }
+
+                // แนวโน้มรายได้ลดลง 3 ปี
+                const revKey = Object.keys(comp.incomeStatement).find(k => k.includes("รายได้รวม") || k.includes("รายได้จากการขาย"));
+                if (revKey) {
+                    const vals = comp.incomeStatement[revKey] || [];
+                    const revAmounts = [];
+                    years.forEach((yr, idx) => {
+                        let amtStr = idx === 0 ? vals[0] : vals[2 * idx - 1];
+                        if (amtStr && amtStr !== "-") revAmounts.push(parseFloat(amtStr.replace(/,/g, '')));
+                    });
+                    if (revAmounts.length >= 3) {
+                        const v0 = revAmounts[revAmounts.length - 3];
+                        const v1 = revAmounts[revAmounts.length - 2];
+                        const v2 = revAmounts[revAmounts.length - 1];
+                        if (v2 < v1 && v1 < v0) {
+                            warnings.push(`⚠️ <b>รายได้ของกิจการลดลงต่อเนื่อง 3 ปี:</b> ยอดขายหดตัวติดต่อกัน 3 ปีล่าสุด`);
+                            score += 10;
+                        }
                     }
                 }
             }
@@ -654,6 +742,14 @@
             if (!comp) return;
             document.getElementById("targetCompanyId").value = comp.companyId;
             updateLivePreview(comp);
+        }
+
+        function resetCompanyData() {
+            activeJob = { companyId: null, companyName: null, years: [], balanceSheet: {}, incomeStatement: {} };
+            document.getElementById("targetCompanyId").value = "";
+            document.getElementById("companyName").innerText = "กรุณารับข้อมูลงบการเงิน";
+            document.getElementById("companyId").innerText = "-";
+            updateLivePreview(activeJob);
         }
 
         async function pasteFromClipboard() {
