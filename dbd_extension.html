@@ -436,19 +436,14 @@
             // Build Table Headers dynamically
             let headerHtml = `<tr><th rowspan="2" class="text-left py-2 px-3 align-middle bg-slate-900 text-white font-bold border border-slate-700 min-w-[210px] w-[28%]">รายการแถวตรวจงบฉบับเต็ม</th>`;
             years.forEach((yr, idx) => {
-                const colSpan = idx === 0 ? 1 : 2;
-                headerHtml += `<th colspan="${colSpan}" class="text-center py-1 bg-slate-900 text-white font-bold border border-slate-700">ปี พ.ศ. ${yr}</th>`;
+                headerHtml += `<th colspan="2" class="text-center py-1 bg-slate-900 text-white font-bold border border-slate-700">ปี พ.ศ. ${yr}</th>`;
             });
             headerHtml += `</tr><tr>`;
             years.forEach((yr, idx) => {
-                if (idx === 0) {
-                    headerHtml += `<th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[15%]">จำนวนเงิน</th>`;
-                } else {
-                    headerHtml += `
-                        <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[12%]">จำนวนเงิน</th>
-                        <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[8%]">%</th>
-                    `;
-                }
+                headerHtml += `
+                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[12%]">จำนวนเงิน</th>
+                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[8%]">%</th>
+                `;
             });
             headerHtml += `</tr>`;
             
@@ -459,7 +454,7 @@
             let bsHtml = "";
             const bsKeys = Object.keys(comp.balanceSheet);
             if(bsKeys.length === 0) {
-                bsHtml = `<tr><td colspan="${(years.length * 2)}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบแสดงฐานะการเงิน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
+                bsHtml = `<tr><td colspan="${(years.length * 2 + 1)}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบแสดงฐานะการเงิน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
             } else {
                 bsKeys.forEach(key => {
                     const values = comp.balanceSheet[key] || [];
@@ -467,24 +462,16 @@
                     bsHtml += `<tr class="${isTotalRow ? 'font-bold bg-slate-100/50' : ''}"><td class="row-title border border-slate-200 text-left py-1.5 px-2 bg-slate-50">${key}</td>`;
                     
                     years.forEach((yr, idx) => {
-                        let amtVal = "-";
-                        let pctVal = "-";
-                        if (idx === 0) {
-                            amtVal = values[0] !== undefined ? values[0] : "-";
-                            const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
-                            bsHtml += `<td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>`;
-                        } else {
-                            amtVal = values[2 * idx - 1] !== undefined ? values[2 * idx - 1] : "-";
-                            pctVal = values[2 * idx] !== undefined ? values[2 * idx] : "-";
-                            
-                            const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
-                            const isPctNeg = parseFloat(pctVal?.replace(/,/g, '')) < 0;
-                            
-                            bsHtml += `
-                                <td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>
-                                <td class="border border-slate-200 py-1.5 px-2 text-right ${isPctNeg ? 'negative-val' : ''}">${formatPctStr(pctVal)}</td>
-                            `;
-                        }
+                        const amtVal = values[2 * idx] !== undefined ? values[2 * idx] : "-";
+                        const pctVal = values[2 * idx + 1] !== undefined ? values[2 * idx + 1] : "-";
+                        
+                        const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
+                        const isPctNeg = parseFloat(pctVal?.replace(/,/g, '')) < 0;
+                        
+                        bsHtml += `
+                            <td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>
+                            <td class="border border-slate-200 py-1.5 px-2 text-right ${isPctNeg ? 'negative-val' : ''}">${formatPctStr(pctVal)}</td>
+                        `;
                     });
                     bsHtml += `</tr>`;
                 });
@@ -495,7 +482,7 @@
             let isHtml = "";
             const isKeys = Object.keys(comp.incomeStatement);
             if(isKeys.length === 0) {
-                isHtml = `<tr><td colspan="${(years.length * 2)}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบกำไรขาดทุน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
+                isHtml = `<tr><td colspan="${(years.length * 2 + 1)}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบกำไรขาดทุน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
             } else {
                 isKeys.forEach(key => {
                     const values = comp.incomeStatement[key] || [];
@@ -503,24 +490,16 @@
                     isHtml += `<tr class="${isTotalRow ? 'font-bold bg-slate-100/50' : ''}"><td class="row-title border border-slate-200 text-left py-1.5 px-2 bg-slate-50">${key}</td>`;
                     
                     years.forEach((yr, idx) => {
-                        let amtVal = "-";
-                        let pctVal = "-";
-                        if (idx === 0) {
-                            amtVal = values[0] !== undefined ? values[0] : "-";
-                            const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
-                            isHtml += `<td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>`;
-                        } else {
-                            amtVal = values[2 * idx - 1] !== undefined ? values[2 * idx - 1] : "-";
-                            pctVal = values[2 * idx] !== undefined ? values[2 * idx] : "-";
-                            
-                            const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
-                            const isPctNeg = parseFloat(pctVal?.replace(/,/g, '')) < 0;
-                            
-                            isHtml += `
-                                <td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>
-                                <td class="border border-slate-200 py-1.5 px-2 text-right ${isPctNeg ? 'negative-val' : ''}">${formatPctStr(pctVal)}</td>
-                            `;
-                        }
+                        const amtVal = values[2 * idx] !== undefined ? values[2 * idx] : "-";
+                        const pctVal = values[2 * idx + 1] !== undefined ? values[2 * idx + 1] : "-";
+                        
+                        const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
+                        const isPctNeg = parseFloat(pctVal?.replace(/,/g, '')) < 0;
+                        
+                        isHtml += `
+                            <td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>
+                            <td class="border border-slate-200 py-1.5 px-2 text-right ${isPctNeg ? 'negative-val' : ''}">${formatPctStr(pctVal)}</td>
+                        `;
                     });
                     isHtml += `</tr>`;
                 });
