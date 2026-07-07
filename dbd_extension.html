@@ -509,7 +509,7 @@
                             const isAmtNeg = parseFloat(amtVal?.replace(/,/g, '')) < 0;
                             const isPctNeg = parseFloat(pctVal?.replace(/,/g, '')) < 0;
                             
-                            bsHtml += `
+                            isHtml += `
                                 <td class="border border-slate-200 py-1.5 px-2 text-right ${isAmtNeg ? 'negative-val' : ''}">${formatNumberStr(amtVal)}</td>
                                 <td class="border border-slate-200 py-1.5 px-2 text-right ${isPctNeg ? 'negative-val' : ''}">${formatPctStr(pctVal)}</td>
                             `;
