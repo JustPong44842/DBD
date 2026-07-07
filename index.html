@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBD Integrated Financial Hub (Full Scale Version)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght=0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f8fafc;
+        }
+        .financial-table th {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-size: 11px;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+        }
+        .financial-table td {
+            font-size: 11px;
+            padding: 5px 8px;
+            border: 1px solid #cbd5e1;
+            text-align: right;
+        }
+        .financial-table .row-title {
+            text-align: left;
+            font-weight: 500;
+            background-color: #f8fafc;
+        }
+        .financial-table tr:hover td {
+            background-color: #f1f5f9;
+        }
+        .negative-val {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        /* ตกแต่งเลย์เอาต์ตอนสั่งพิมพ์ออกกระดาษ A4 แนวตั้ง */
+        @media print {
+            body {
+                background: none !important;
+                background-color: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 12mm 12mm 12mm 12mm;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+            }
+            .table-section {
+                page-break-inside: auto !important;
+            }
+            .financial-table tr {
+                page-break-inside: avoid !important;
+                page-break-after: auto !important;
+            }
+            .financial-table th {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .financial-table .row-title {
+                background-color: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <header class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center shadow-md no-print shrink-0">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl">📊</span>
+            <div>
+                <h1 class="text-base font-bold leading-tight">DBD Financial Hub <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded ml-2 font-normal">v2.0 Full-Scale</span></h1>
+                <p class="text-[10px] text-slate-400">ระบบดึงรายงานงบการเงินตัวเต็มและประเมินความเสี่ยงอัตโนมัติ รองรับตารางยาวแบบไดนามิก</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-semibold border border-emerald-500/30 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> App Sync Service Active
+            </span>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden no-print">
+        
+        <aside class="w-[420px] bg-white border-r border-slate-200 flex flex-col justify-between shrink-0">
+            <div class="p-5 flex flex-col gap-4 overflow-y-auto">
+                
+                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 shadow-sm animate-fade-in">
+                    <h3 class="text-xs font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
+                        <span class="animate-bounce">⚡</span> อัปเดตสคริปต์ดึงงบตัวเต็ม (Full-Scan Engine)
+                    </h3>
+                    <p class="text-[11px] text-indigo-700 mb-3">
+                        กรุณาลบ Bookmarklet ตัวเก่าออก แล้วจับปุ่มสีม่วงนี้ลากขึ้นไปปล่อยที่ <b>"แถบบุ๊กมาร์ก"</b> อีกครั้ง เพื่อรองรับการดึงตารางแบบไม่คัดย่อ
+                    </p>
+                    
+                    <a href="javascript:(function(){var companyNameEl=document.querySelector('h3');var companyIdEl=document.querySelector('h4');var companyName=companyNameEl?companyNameEl.innerText.replace('ชื่อนิติบุคคล :','').trim():'ไม่พบชื่อ';var companyId=companyIdEl?companyIdEl.innerText.replace('เลขทะเบียนนิติบุคคล :','').trim():'0000000000000';var table=document.querySelector('table.table-hover');if(!table){alert('❌ ไม่พบตารางข้อมูลงบการเงินในหน้านี้ กรุณารอให้ตารางแสดงผลเสร็จสิ้นก่อนครับ');return;}var activeMenu=document.querySelector('.finMenu.active');var sheetType=activeMenu?activeMenu.innerText.trim():'';if(!sheetType){if(table.innerText.includes('สินทรัพย์รวม')){sheetType='งบแสดงฐานะการเงิน';}else if(table.innerText.includes('รายได้รวม')){sheetType='งบกำไรขาดทุน';}else{sheetType='งบการเงิน';}}var headers=[];var headerRows=table.querySelectorAll('thead tr');if(headerRows.length>0){var cols=headerRows[headerRows.length-1].querySelectorAll('th');cols.forEach(function(col){var text=col.textContent.trim();if(text&&!text.includes('หน่วย')&&!isNaN(text)){headers.push(parseInt(text));}});}var rows=table.querySelectorAll('tbody tr');var currentSheetData={};rows.forEach(function(row){var titleEl=row.querySelector('th, td.text-start, td:nth-child(1)');if(!titleEl)return;var title=titleEl.innerText.trim();if(!title||title.includes('รวม')&&row.classList.contains('bg-slate-100')){}var cells=row.querySelectorAll('td');var values=[];cells.forEach(function(cell,idx){if(cells.length>1&&idx===0)return;var txt=cell.innerText.trim().replace(/,/g,'');if(txt==='-'||txt===''){txt='0.00';}if(!isNaN(parseFloat(txt))||txt==='0.00'){values.push(txt);}});if(title&&values.length>0){currentSheetData[title]=values;}});var payload={companyName:companyName,companyId:companyId,years:headers,sheetType:sheetType,data:currentSheetData};var dataStr=JSON.stringify({action:'DBD_SCRAPED',payload:payload});navigator.clipboard.writeText(dataStr).then(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! ข้อมูลถูกส่งเข้าส่วนขยายอัตโนมัติแล้ว');}catch(e){alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูลจากคลิปบอร์ด');}}else{alert('⚡ ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากลับไปหน้างบการเงินแล้วกดปุ่ม วางข้อมูลจากคลิปบอร์ด');}}).catch(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');alert('⚡ ดึงข้อมูลสำเร็จ! ส่งเข้าแอปหลักอัตโนมัติ (แต่ไม่สามารถคัดลอกลงคลิปบอร์ดได้)');}catch(e){alert('❌ ดึงข้อมูลล้มเหลว');}}else{alert('❌ ไม่พบคลิปบอร์ดและลิงก์เปิด');}});})();" 
+                       class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition-all inline-flex items-center justify-center gap-1.5 cursor-grab shadow-md select-none text-center animate-pulse"
+                       onclick="alert('กรุณาคลิกค้างที่ปุ่มนี้ แล้วลากขึ้นไปวางไว้บน แถบบุ๊กมาร์ก (Bookmarks Bar) ของเบราว์เซอร์ครับ!'); return false;">
+                        ➡️ ลากปุ่มนี้ไปวางที่แถบบุ๊กมาร์ก (เวอร์ชันเต็ม) 📊
+                    </a>
+                    <div class="text-[10px] text-indigo-500 mt-2 text-center">
+                        💡 คีย์ลัดเปิดแถบบุ๊กมาร์ก: Ctrl+Shift+B (Windows) / Cmd+Shift+B (Mac)
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                        <span>🔌</span> 1. ระบุเลขทะเบียนนิติบุคคล
+                    </h2>
+                    <div class="flex gap-2">
+                        <input type="text" id="targetCompanyId" placeholder="ป้อนเลขทะเบียน 13 หลัก..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-500 focus:outline-none font-mono" value="0175546000014">
+                        <button onclick="openDbdWebsite()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors shrink-0 shadow-sm">
+                            🌐 เปิดหน้าเว็บ DBD
+                        </button>
+                    </div>
+                    <button onclick="pasteFromClipboard()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg text-xs transition-colors shadow-sm flex items-center justify-center gap-1.5 no-print">
+                        📋 วางข้อมูลจากคลิปบอร์ด (กรณีรันบนคอมตัวเอง)
+                    </button>
+                </div>
+
+                <div class="border border-slate-100 rounded-lg overflow-hidden mt-2">
+                    <div class="bg-slate-50 px-3 py-2 border-b border-slate-100 text-[11px] font-bold text-slate-600 flex justify-between">
+                        <span>ประวัติการดึงข้อมูลในระบบ</span>
+                        <span id="savedCount">0 บริษัท</span>
+                    </div>
+                    <ul id="companyListContainer" class="divide-y divide-slate-100 max-h-40 overflow-y-auto text-xs"></ul>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs space-y-2">
+                    <div class="font-bold text-slate-800">📋 ลำดับขั้นตอนเพื่อรับงบฉบับเต็ม:</div>
+                    <ol class="list-decimal pl-4 text-slate-600 space-y-1.5 text-[11px]">
+                        <li>กดปุ่ม <b>"เปิดหน้าเว็บ DBD"</b> ด้านบน ระบบจะพาวิ่งไปหน้าบริษัทปลายทาง</li>
+                        <li>คลิกแท็บ <b>"ข้อมูลงบการเงิน"</b> บนเว็บ DBD แล้วเลือก <b>"งบแสดงฐานะการเงิน"</b> จากนั้นคลิกปุ่มบุ๊กมาร์กที่ลากไว้</li>
+                        <li>เปลี่ยนไปที่แท็บ <b>"งบกำไรขาดทุน"</b> **เลื่อนลงให้ตารางแสดงผลครบถ้วน** แล้วคลิกปุ่มบุ๊กมาร์กอีกครั้ง</li>
+                    </ol>
+                </div>
+
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-2 shrink-0">
+                <button onclick="triggerPrint()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition-all shadow flex items-center justify-center gap-1.5">
+                    🖨️ สั่งพิมพ์รายงานแผ่นนี้ (A4 Portrait)
+                </button>
+                <div class="text-[10px] text-slate-400 text-center">
+                    * ตารางแบบเต็มจะจัดเลย์เอาต์ไหลลงด้านล่างตามแนวตั้งอย่างต่อเนื่องแบบสมบูรณ์
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-8 overflow-y-auto flex justify-center items-start bg-slate-100">
+            <div id="printArea" class="print-container bg-white shadow-2xl p-[12mm] border border-slate-300 w-[210mm] min-h-[297mm] box-border flex flex-col justify-between">
+                <div class="flex flex-col gap-5">
+                    
+                    <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-end">
+                        <div>
+                            <h1 class="text-base font-extrabold text-slate-900 leading-tight">รายงานประเมินประสิทธิภาพและวิเคราะห์งบการเงินฉบับเต็ม</h1>
+                            <p class="text-[9px] text-slate-500 mt-0.5">ระบบเชื่อมโยงข้อมูลไร้รอยต่อข้ามโครงสร้างหน้าต่าง (Full-Scale Data Integration Canvas)</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-800" id="currentDateText">ข้อมูล ณ วันที่: 7 ก.ค. 2569</p>
+                            <p class="text-[9px] text-slate-400">ขนาดหน้าพิมพ์มาตรฐาน A4 (แนวตั้ง)</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-2.5 rounded border border-slate-200">
+                        <div class="text-xs space-y-1">
+                            <div class="flex"><span class="w-24 font-semibold text-slate-500">ชื่อนิติบุคคล:</span> <span id="companyName" class="font-bold text-slate-900">-</span></div>
+                            <div class="flex"><span class="w-24 font-semibold text-slate-500">เลขทะเบียน:</span> <span id="companyId" class="text-slate-900 font-mono">-</span></div>
+                            <div class="flex"><span class="w-24 font-semibold text-slate-500">แหล่งข้อมูล:</span> <span class="text-slate-900">กรมพัฒนาธุรกิจการค้า (DBD DataWarehouse+)</span></div>
+                        </div>
+                        <div class="text-xs space-y-1 border-l border-slate-200 pl-4">
+                            <div class="flex"><span class="w-24 font-semibold text-slate-500">สถานะกิจการ:</span> <span class="font-bold text-green-600">ยังดำเนินกิจการอยู่</span></div>
+                            <div class="flex"><span class="w-24 font-semibold text-slate-500">ระดับความเสี่ยง:</span> <span id="riskLevel" class="font-bold">-</span></div>
+                        </div>
+                    </div>
+
+                    <div id="riskAlertBox" class="border p-2.5 rounded flex flex-col gap-1">
+                        <h3 class="text-xs font-bold flex items-center gap-1.5" id="alertHeader">
+                            <span id="alertIcon">⚠️</span> <span id="alertTitle">ระบบกำลังประเมินสถานะ...</span>
+                        </h3>
+                        <ul id="alertList" class="list-disc pl-5 text-[9.5px] space-y-0.5 text-slate-700"></ul>
+                    </div>
+
+                    <div class="table-section">
+                        <h3 class="text-xs font-bold text-slate-800 mb-1.5 flex justify-between items-center">
+                            <span>📊 1. งบแสดงฐานะการเงิน (Balance Sheet) รายการเต็ม</span>
+                            <span class="text-[9px] text-slate-400 font-normal">หน่วย: บาท</span>
+                        </h3>
+                        <table class="financial-table w-full">
+                            <thead id="bsHeader"></thead>
+                            <tbody id="bsBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-section">
+                        <h3 class="text-xs font-bold text-slate-800 mb-1.5 flex justify-between items-center">
+                            <span>📈 2. งบกำไรขาดทุน (Income Statement) รายการเต็ม</span>
+                            <span class="text-[9px] text-slate-400 font-normal">หน่วย: บาท</span>
+                        </h3>
+                        <table class="financial-table w-full">
+                            <thead id="isHeader"></thead>
+                            <tbody id="isBody"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="border-t border-dashed border-slate-300 pt-2 flex justify-between items-center text-[8.5px] text-slate-400 mt-6 page-break-inside-avoid">
+                    <div>* เอกสารวิเคราะห์ฉบับเต็มเรนเดอร์โครงสร้างตารางอัตโนมัติแบบไร้การดัดแปลงหรือตัดทอนข้อมูล</div>
+                    <div>ระบบวิเคราะห์ข้อมูลการเงินทดลอง</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // บันทึกตัวอย่างเริ่มต้น (โครงสร้างข้อมูลจำลองแบบละเอียดสำหรับแสดงผลครั้งแรก)
+        const appDatabase = [
+            {
+                companyName: "บริษัท ก๊าซ เอ บี ซี (2003) จำกัด",
+                companyId: "0175546000014",
+                years: [2566, 2567, 2568],
+                balanceSheet: {
+                    "สินทรัพย์หมุนเวียน": ["2,272,302.12", "954,022.38", "797,750.90"],
+                    "เงินสดและรายการเทียบเท่าเงินสด": ["520,000.00", "310,000.00", "150,000.00"],
+                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,200,000.00", "450,000.00", "320,000.00"],
+                    "สินค้าคงเหลือ": ["552,302.12", "194,022.38", "327,750.90"],
+                    "สินทรัพย์ไม่หมุนเวียน": ["4,990,790.99", "4,983,637.57", "4,201,326.07"],
+                    "ที่ดิน อาคารและอุปกรณ์": ["4,500,000.00", "4,500,000.00", "3,900,000.00"],
+                    "สินทรัพย์รวม": ["7,263,093.11", "5,937,659.95", "4,999,076.97"],
+                    "หนี้สินหมุนเวียน": ["2,085,674.17", "2,438,671.71", "3,366,080.09"],
+                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,500,000.00", "1,800,000.00", "2,500,000.00"],
+                    "หนี้สินไม่หมุนเวียน": ["4,690,879.24", "3,293,487.10", "2,099,666.96"],
+                    "หนี้สินรวม": ["6,776,553.41", "5,732,158.81", "5,465,747.05"],
+                    "ส่วนของผู้ถือหุ้น": ["486,539.70", "205,501.14", "-466,670.08"]
+                },
+                incomeStatement: {
+                    "รายได้จากการขายและบริการ": ["3,500,000.00", "2,900,000.00", "2,500,000.00"],
+                    "รายได้อื่น": ["355,627.97", "208,311.95", "168,541.33"],
+                    "รายได้รวม": ["3,855,627.97", "3,108,311.95", "2,668,541.33"],
+                    "ต้นทุนขายและบริการ": ["2,100,000.00", "1,850,000.00", "1,600,000.00"],
+                    "กำไรขั้นต้น": ["1,400,000.00", "1,050,000.00", "900,000.00"],
+                    "ค่าใช้จ่ายในการขาย": ["350,000.00", "320,000.00", "280,000.00"],
+                    "ค่าใช้จ่ายในการบริหาร": ["500,000.00", "460,000.00", "400,000.00"],
+                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["850,000.00", "780,000.00", "680,000.00"],
+                    "ต้นทุนทางการเงิน": ["120,000.00", "110,000.00", "105,000.00"],
+                    "ภาษีเงินได้": ["34,331.20", "2,891.47", "60,850.50"],
+                    "กำไร (ขาดทุน) สุทธิ": ["95,296.77", "5,420.48", "-222,690.83"]
+                }
+            },
+            {
+                companyName: "บริษัท ทีเอบี ปริ้นท์ติ้ง จำกัด",
+                companyId: "0105553093952",
+                years: [2566, 2567, 2568],
+                balanceSheet: {
+                    "สินทรัพย์หมุนเวียน": ["3,540,000.00", "2,890,000.00", "1,980,000.00"],
+                    "เงินสดและรายการเทียบเท่าเงินสด": ["850,000.00", "520,000.00", "120,000.00"],
+                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,800,000.00", "1,100,000.00", "650,000.00"],
+                    "สินค้าคงเหลือ": ["890,000.00", "1,270,000.00", "1,210,000.00"],
+                    "สินทรัพย์ไม่หมุนเวียน": ["6,200,000.00", "6,100,000.00", "5,800,000.00"],
+                    "ที่ดิน อาคารและอุปกรณ์": ["5,800,000.00", "5,800,000.00", "5,500,000.00"],
+                    "สินทรัพย์รวม": ["9,740,000.00", "8,990,000.00", "7,780,000.00"],
+                    "หนี้สินหมุนเวียน": ["2,800,000.00", "3,100,000.00", "4,200,000.00"],
+                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,900,000.00", "2,200,000.00", "3,100,000.00"],
+                    "หนี้สินไม่หมุนเวียน": ["4,800,000.00", "3,500,000.00", "2,200,000.00"],
+                    "หนี้สินรวม": ["7,600,000.00", "6,600,000.00", "6,400,000.00"],
+                    "ส่วนของผู้ถือหุ้น": ["2,140,000.00", "2,390,000.00", "1,380,000.00"]
+                },
+                incomeStatement: {
+                    "รายได้จากการขายและบริการ": ["6,800,000.00", "5,900,000.00", "4,200,000.00"],
+                    "รายได้อื่น": ["420,000.00", "350,000.00", "280,000.00"],
+                    "รายได้รวม": ["7,220,000.00", "6,250,000.00", "4,480,000.00"],
+                    "ต้นทุนขายและบริการ": ["4,100,000.00", "3,800,000.00", "3,200,000.00"],
+                    "กำไรขั้นต้น": ["3,120,000.00", "2,450,000.00", "1,280,000.00"],
+                    "ค่าใช้จ่ายในการขาย": ["850,000.00", "780,000.00", "650,000.00"],
+                    "ค่าใช้จ่ายในการบริหาร": ["1,200,000.00", "1,150,000.00", "950,000.00"],
+                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["2,050,000.00", "1,930,000.00", "1,600,000.00"],
+                    "ต้นทุนทางการเงิน": ["280,000.00", "240,000.00", "210,000.00"],
+                    "ภาษีเงินได้": ["158,000.00", "56,000.00", "-106,000.00"],
+                    "กำไร (ขาดทุน) สุทธิ": ["632,000.00", "224,000.00", "-424,000.00"]
+                }
+            }
+        ];
+
+        let activeJob = { companyId: null, companyName: null, years: [], balanceSheet: {}, incomeStatement: {} };
+
+        window.onload = function() {
+            // Load companies from localStorage and merge into appDatabase
+            const storedDbd = localStorage.getItem('ghb_dbd_database');
+            if (storedDbd) {
+                try {
+                    const parsed = JSON.parse(storedDbd);
+                    parsed.forEach(item => {
+                        if (!appDatabase.some(c => c.companyId === item.companyId)) {
+                            appDatabase.push(item);
+                        }
+                    });
+                } catch(e) {}
+            }
+
+            renderCompanyList();
+            
+            // Read companyId/name parameters from URL query string
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlCompanyId = urlParams.get('id') || urlParams.get('companyId');
+            const urlCompanyName = urlParams.get('name') || urlParams.get('companyName');
+            
+            if (urlCompanyId) {
+                document.getElementById("targetCompanyId").value = urlCompanyId;
+                if (appDatabase.some(c => c.companyId === urlCompanyId)) {
+                    loadCompanyData(urlCompanyId);
+                }
+            } else if (urlCompanyName) {
+                // If company name was passed, set it as active search term or search match in list
+                const matched = appDatabase.find(c => c.companyName.includes(urlCompanyName) || urlCompanyName.includes(c.companyName));
+                if (matched) {
+                    loadCompanyData(matched.companyId);
+                } else {
+                    document.getElementById("companyName").innerText = urlCompanyName;
+                    document.getElementById("targetCompanyId").value = "";
+                }
+            } else if (appDatabase.length > 0) {
+                loadCompanyData(appDatabase[0].companyId);
+            }
+            
+            setupPostMessageReceiver();
+        };
+
+        function openDbdWebsite() {
+            const companyId = document.getElementById("targetCompanyId").value.trim();
+            if(!companyId || companyId.length !== 13 || isNaN(companyId)) {
+                alert("กรุณากรอกเลขทะเบียนนิติบุคคล 13 หลักให้ถูกต้องก่อนครับ");
+                return;
+            }
+            activeJob = { companyId: companyId, companyName: null, years: [], balanceSheet: {}, incomeStatement: {} };
+            const targetUrl = `https://datawarehouse.dbd.go.th/company/profile/5${companyId}`;
+            window.open(targetUrl, 'dbd_opener_window');
+        }
+
+        function setupPostMessageReceiver() {
+            window.addEventListener("message", function(event) {
+                if (event.data && event.data.action === "DBD_SCRAPED") {
+                    const payload = event.data.payload;
+
+                    if (activeJob.companyId && activeJob.companyId !== payload.companyId) {
+                        alert(`⚠️ ข้อมูลที่ดึงจากหน้าเว็บ (${payload.companyName}) ไม่ตรงกับเลขทะเบียนนิติบุคคลที่ระบุไว้ตั้งต้น`);
+                        return;
+                    }
+
+                    activeJob.companyName = payload.companyName;
+                    activeJob.years = payload.years;
+
+                    const sheet = payload.sheetType;
+                    if (sheet.includes("ฐานะการเงิน") || sheet.includes("ดุล")) {
+                        activeJob.balanceSheet = payload.data;
+                        showFloatingToast(`📥 งบแสดงฐานะการเงินรายการเต็มเชื่อมต่อสำเร็จ! รันแท็บถัดไปได้เลย`);
+                    } else if (sheet.includes("กำไรขาดทุน")) {
+                        activeJob.incomeStatement = payload.data;
+                        showFloatingToast(`📈 งบกำไรขาดทุนรายการเต็มเชื่อมต่อสำเร็จ!`);
+                    }
+
+                    if (Object.keys(activeJob.balanceSheet).length > 0 && Object.keys(activeJob.incomeStatement).length > 0) {
+                        saveJobToDatabase();
+                    } else {
+                        updateLivePreview(activeJob);
+                    }
+                }
+            });
+        }
+
+        function saveJobToDatabase() {
+            const index = appDatabase.findIndex(c => c.companyId === activeJob.companyId);
+            const finalizedObject = {
+                companyName: activeJob.companyName,
+                companyId: activeJob.companyId,
+                years: activeJob.years,
+                balanceSheet: activeJob.balanceSheet,
+                incomeStatement: activeJob.incomeStatement
+            };
+
+            if (index !== -1) { appDatabase[index] = finalizedObject; } 
+            else { appDatabase.unshift(finalizedObject); }
+
+            localStorage.setItem('ghb_dbd_database', JSON.stringify(appDatabase));
+
+            renderCompanyList();
+            loadCompanyData(activeJob.companyId);
+            playSuccessSound();
+            alert(`🎉 เรียบร้อย! ดึงงบการเงินและงบกำไรขาดทุนแบบเต็มจำนวนของบริษัท "${activeJob.companyName}" ครบถ้วน 100% พร้อมจัดพิมพ์ลงแนวตั้งแล้วครับ`);
+        }
+
+        function updateLivePreview(comp) {
+            document.getElementById("companyName").innerText = comp.companyName || "กำลังรับข้อมูล...";
+            document.getElementById("companyId").innerText = comp.companyId;
+
+            const years = comp.years && comp.years.length > 0 ? comp.years : [2566, 2567, 2568];
+            
+            let headerHtml = `<tr><th class="w-[46%] text-left">รายการแถวตรวจงบฉบับเต็ม</th>`;
+            years.forEach(yr => { headerHtml += `<th class="w-[18%]">ปี พ.ศ. ${yr}</th>`; });
+            headerHtml += `</tr>`;
+            document.getElementById("bsHeader").innerHTML = headerHtml;
+            document.getElementById("isHeader").innerHTML = headerHtml;
+
+            // 1. Render Balance Sheet (Full Loop Based on Received Keys)
+            let bsHtml = "";
+            const bsKeys = Object.keys(comp.balanceSheet);
+            if(bsKeys.length === 0) {
+                bsHtml = `<tr><td colspan="${years.length + 1}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบแสดงฐานะการเงิน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
+            } else {
+                bsKeys.forEach(key => {
+                    const values = comp.balanceSheet[key] || Array(years.length).fill("-");
+                    const isTotalRow = key.includes("รวม") || key === "ส่วนของผู้ถือหุ้น";
+                    bsHtml += `<tr class="${isTotalRow ? 'font-bold bg-slate-50' : ''}"><td class="row-title">${key}</td>`;
+                    values.forEach(val => {
+                        const isNeg = parseFloat(val?.replace(/,/g, '')) < 0;
+                        bsHtml += `<td class="${isNeg ? 'negative-val' : ''}">${formatNumberStr(val)}</td>`;
+                    });
+                    bsHtml += `</tr>`;
+                });
+            }
+            document.getElementById("bsBody").innerHTML = bsHtml;
+
+            // 2. Render Income Statement (Full Loop Based on Received Keys)
+            let isHtml = "";
+            const isKeys = Object.keys(comp.incomeStatement);
+            if(isKeys.length === 0) {
+                isHtml = `<tr><td colspan="${years.length + 1}" class="text-center text-slate-400 py-4">ยังไม่ได้รับข้อมูลงบกำไรขาดทุน (กรุณากดรันบุ๊กมาร์กที่หน้างบนี้บนเว็บ DBD)</td></tr>`;
+            } else {
+                isKeys.forEach(key => {
+                    const values = comp.incomeStatement[key] || Array(years.length).fill("-");
+                    const isTotalRow = key.includes("รวม") || key.includes("สุทธิ") || key.includes("ขั้นต้น");
+                    isHtml += `<tr class="${isTotalRow ? 'font-bold bg-slate-50' : ''}"><td class="row-title">${key}</td>`;
+                    values.forEach(val => {
+                        const isNeg = parseFloat(val?.replace(/,/g, '')) < 0;
+                        isHtml += `<td class="${isNeg ? 'negative-val' : ''}">${formatNumberStr(val)}</td>`;
+                    });
+                    isHtml += `</tr>`;
+                });
+            }
+            document.getElementById("isBody").innerHTML = isHtml;
+
+            runAnalysisEngine(comp, years);
+        }
+
+        // AI Rule Analyzer Engine (Fuzzy Keys Filter)
+        function runAnalysisEngine(comp, years) {
+            const warnings = [];
+            let score = 0;
+            const latestIdx = years.length - 1;
+
+            // 1. ตรวจสอบการไม่ส่งงบ / ขาดส่งงบปีล่าสุด
+            const currentYearThai = new Date().getFullYear() + 543;
+            const expectedLatestYear = currentYearThai - 2; // เช่น ปัจจุบัน 2569 คาดหวังอย่างน้อย 2567
+            const latestSubmittedYear = years && years.length > 0 ? years[years.length - 1] : null;
+
+            if (Object.keys(comp.balanceSheet).length === 0 && Object.keys(comp.incomeStatement).length === 0) {
+                warnings.push(`🚨 <b>ไม่พบข้อมูลงบการเงิน:</b> กิจการนี้ยังไม่มีประวัติการนำส่งงบการเงินใด ๆ เข้าระบบคลังข้อมูล DBD`);
+                score += 50;
+            } else if (latestSubmittedYear && latestSubmittedYear < expectedLatestYear) {
+                warnings.push(`⚠️ <b>ขาดการนำส่งงบการเงินล่าสุด:</b> งบการเงินปีล่าสุดที่ส่งคือ พ.ศ. ${latestSubmittedYear} (ไม่มีข้อมูลงบของปี พ.ศ. ${expectedLatestYear} - ${currentYearThai - 1})`);
+                score += 25;
+            }
+
+            // 2. ค้นหาคีย์ที่มีคำว่าส่วนของผู้ถือหุ้น เพื่อเช็กทุนติดลบ
+            const equityKey = Object.keys(comp.balanceSheet).find(k => k.includes("ส่วนของผู้ถือหุ้น") && !k.includes("รวม"));
+            if (equityKey) {
+                const vals = comp.balanceSheet[equityKey];
+                const latestVal = vals[latestIdx];
+                if(latestVal && parseFloat(latestVal.replace(/,/g, '')) < 0) {
+                    warnings.push(`🚨 <b>สภาวะทุนติดลบ (หนี้สินล้นพ้นตัว):</b> รายการ "${equityKey}" ต่ำกว่าศูนย์ (${latestVal} บาท) มีความเสี่ยงขั้นวิกฤต`);
+                    score += 50;
+                }
+            }
+
+            // 3. ค้นหาคีย์ที่มีคำว่ากำไรขาดทุนสุทธิ เพื่อเช็กการขาดทุนต่อเนื่อง
+            const netProfitKey = Object.keys(comp.incomeStatement).find(k => k.includes("กำไร (ขาดทุน) สุทธิ") || k.includes("กำไรสุทธิ") || k.includes("ขาดทุนสุทธิ"));
+            if (netProfitKey) {
+                const vals = comp.incomeStatement[netProfitKey];
+                if (vals && vals.length >= 3) {
+                    let isLossStreak = true;
+                    let trail = [];
+                    for(let i=0; i<3; i++) {
+                        let num = parseFloat(vals[i]?.replace(/,/g, '') || 0);
+                        trail.push(vals[i]);
+                        if (num >= 0) isLossStreak = false;
+                    }
+                    if(isLossStreak) {
+                        warnings.push(`⚠️ <b>ผลประกอบการขาดทุนสะสมต่อเนื่อง:</b> ขาดทุนสุทธิติดต่อกัน 3 ปีย้อนหลัง (${trail.join(" → ")} บาท)`);
+                        score += 30;
+                    }
+                }
+            }
+
+            // 4. ตรวจสอบแนวโน้มสินทรัพย์รวมลดลงต่อเนื่อง 3 ปี
+            const assetsKey = Object.keys(comp.balanceSheet).find(k => k.includes("สินทรัพย์รวม"));
+            if (assetsKey) {
+                const vals = comp.balanceSheet[assetsKey];
+                if (vals && vals.length >= 3) {
+                    const v0 = parseFloat(vals[0]?.replace(/,/g, '') || 0);
+                    const v1 = parseFloat(vals[1]?.replace(/,/g, '') || 0);
+                    const v2 = parseFloat(vals[2]?.replace(/,/g, '') || 0);
+                    if (v2 < v1 && v1 < v0) {
+                        warnings.push(`⚠️ <b>มูลค่าสินทรัพย์รวมลดลงต่อเนื่อง:</b> ขนาดทรัพย์สินหดตัวติดต่อกัน 3 ปี (${formatNumberStr(vals[0])} → ${formatNumberStr(vals[1])} → ${formatNumberStr(vals[2])} บาท)`);
+                        score += 15;
+                    }
+                }
+            }
+
+            // 5. ตรวจสอบแนวโน้มรายได้รวมลดลงต่อเนื่อง 3 ปี
+            const revenueKey = Object.keys(comp.incomeStatement).find(k => k.includes("รายได้รวม") || k.includes("รายได้จากการขาย"));
+            if (revenueKey) {
+                const vals = comp.incomeStatement[revenueKey];
+                if (vals && vals.length >= 3) {
+                    const v0 = parseFloat(vals[0]?.replace(/,/g, '') || 0);
+                    const v1 = parseFloat(vals[1]?.replace(/,/g, '') || 0);
+                    const v2 = parseFloat(vals[2]?.replace(/,/g, '') || 0);
+                    if (v2 < v1 && v1 < v0) {
+                        warnings.push(`⚠️ <b>รายได้ของกิจการลดลงต่อเนื่อง:</b> รายได้หดตัวติดต่อกัน 3 ปี (${formatNumberStr(vals[0])} → ${formatNumberStr(vals[1])} → ${formatNumberStr(vals[2])} บาท)`);
+                        score += 15;
+                    }
+                }
+            }
+
+            // Update Risks UI
+            const alertBox = document.getElementById("riskAlertBox");
+            const alertHeader = document.getElementById("alertHeader");
+            const alertTitle = document.getElementById("alertTitle");
+            const alertIcon = document.getElementById("alertIcon");
+            const alertList = document.getElementById("alertList");
+            const riskLevel = document.getElementById("riskLevel");
+
+            alertList.innerHTML = "";
+
+            if (score >= 50) {
+                riskLevel.innerText = "🚨 ความเสี่ยงสูง (โปรดเฝ้าระวังขั้นวิกฤต)";
+                riskLevel.className = "font-bold text-red-600";
+                alertBox.className = "border border-red-200 bg-red-50 p-2.5 rounded flex flex-col gap-0.5";
+                alertHeader.className = "text-xs font-bold flex items-center gap-1.5 text-red-800";
+                alertIcon.innerText = "🚨";
+                alertTitle.innerText = "ระบบตรวจพบโครงสร้างงบการเงินมีความมั่นคงต่ำผิดปกติ";
+            } else if (score >= 25) {
+                riskLevel.innerText = "⚠️ ความเสี่ยงปานกลาง (มีข้อสังเกต)";
+                riskLevel.className = "font-bold text-amber-600";
+                alertBox.className = "border border-amber-200 bg-amber-50 p-2.5 rounded flex flex-col gap-0.5";
+                alertHeader.className = "text-xs font-bold flex items-center gap-1.5 text-amber-800";
+                alertIcon.innerText = "⚠️";
+                alertTitle.innerText = "ตรวจพบรายการสำคัญที่ต้องติดตามผลประเมิน";
+            } else {
+                riskLevel.innerText = "✅ งบการเงินปกติ";
+                riskLevel.className = "font-bold text-green-600";
+                alertBox.className = "border border-green-200 bg-green-50 p-2.5 rounded flex flex-col gap-0.5";
+                alertHeader.className = "text-xs font-bold flex items-center gap-1.5 text-green-800";
+                alertIcon.innerText = "✅";
+                alertTitle.innerText = "ผลการตรวจเช็คสุขภาพทางการเงินระดับปกติ";
+            }
+
+            if (warnings.length > 0) {
+                warnings.forEach(warn => {
+                    const li = document.createElement("li");
+                    li.innerHTML = warn;
+                    alertList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement("li");
+                li.innerText = "งบการเงินโครงสร้างปกติ รายการสัดส่วนทางการเงินเป็นไปตามเกณฑ์มาตรฐาน";
+                li.className = "list-none text-green-700";
+                alertList.appendChild(li);
+            }
+        }
+
+        function loadCompanyData(id) {
+            const comp = appDatabase.find(c => c.companyId === id);
+            if (!comp) return;
+            document.getElementById("targetCompanyId").value = comp.companyId;
+            updateLivePreview(comp);
+        }
+
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const data = JSON.parse(text);
+                const payload = data.payload || data;
+                
+                if (payload && (payload.companyId && payload.sheetType)) {
+                    activeJob.companyId = payload.companyId;
+                    activeJob.companyName = payload.companyName;
+                    activeJob.years = payload.years;
+                    
+                    const sheet = payload.sheetType;
+                    if (sheet.includes("ฐานะการเงิน") || sheet.includes("ดุล")) {
+                        activeJob.balanceSheet = payload.data;
+                        showFloatingToast(`📥 วางงบแสดงฐานะการเงินสำเร็จ!`);
+                    } else if (sheet.includes("กำไรขาดทุน")) {
+                        activeJob.incomeStatement = payload.data;
+                        showFloatingToast(`📈 วางงบกำไรขาดทุนสำเร็จ!`);
+                    }
+                    
+                    if (Object.keys(activeJob.balanceSheet).length > 0 && Object.keys(activeJob.incomeStatement).length > 0) {
+                        saveJobToDatabase();
+                    } else {
+                        updateLivePreview(activeJob);
+                    }
+                } else {
+                    alert("❌ รูปแบบข้อมูลในคลิปบอร์ดไม่ถูกต้อง กรุณากดรัน Bookmarklet บนหน้าเว็บ DBD เพื่อคัดลอกข้อมูลก่อนครับ");
+                }
+            } catch (err) {
+                alert("❌ ไม่สามารถอ่านข้อมูลจากคลิปบอร์ดได้ (กรุณาอนุญาตสิทธิ์การเข้าถึงคลิปบอร์ดของเบราว์เซอร์)");
+            }
+        }
+
+        function renderCompanyList() {
+            const container = document.getElementById("companyListContainer");
+            container.innerHTML = "";
+            appDatabase.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "p-2.5 hover:bg-slate-50 cursor-pointer transition-colors flex justify-between items-center";
+                li.setAttribute("onclick", `loadCompanyData('${item.companyId}')`);
+                li.innerHTML = `
+                    <div class="truncate max-w-[260px]">
+                        <div class="font-bold text-slate-800 truncate">${item.companyName}</div>
+                        <div class="text-[10px] text-slate-400 font-mono">ID: ${item.companyId}</div>
+                    </div>
+                    <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">${item.years[item.years.length-1]}</span>
+                `;
+                container.appendChild(li);
+            });
+            document.getElementById("savedCount").innerText = `${appDatabase.length} บริษัท`;
+        }
+
+        function formatNumberStr(str) {
+            if (!str || str === "-") return "-";
+            const val = parseFloat(str.replace(/,/g, ''));
+            if (isNaN(val)) return str;
+            return val.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function showFloatingToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 bg-slate-800 text-white text-xs px-4 py-3 rounded-lg shadow-2xl z-50 border border-slate-700";
+            toast.innerHTML = `🔔 <b>คลังข้อมูลแอป:</b> ${msg}`;
+            document.body.appendChild(toast);
+            setTimeout(() => document.body.removeChild(toast), 4000);
+        }
+
+        function playSuccessSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = "sine"; osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+            } catch(e) {}
+        }
+
+        function triggerPrint() { window.print(); }
+    </script>
+</body>
+</html>
