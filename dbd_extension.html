@@ -121,7 +121,7 @@
                         กรุณาลบ Bookmarklet ตัวเก่าออก แล้วจับปุ่มสีม่วงนี้ลากขึ้นไปปล่อยที่ <b>"แถบบุ๊กมาร์ก"</b> อีกครั้ง เพื่อรองรับการดึงตารางแบบไม่คัดย่อ
                     </p>
                     
-                    <a href="javascript:(function(){var companyNameEl=document.querySelector('h3');var companyIdEl=document.querySelector('h4');var companyName=companyNameEl?companyNameEl.innerText.replace('ชื่อนิติบุคคล :','').trim():'ไม่พบชื่อ';var companyId=companyIdEl?companyIdEl.innerText.replace('เลขทะเบียนนิติบุคคล :','').trim():'0000000000000';var table=document.querySelector('table.table-hover');if(!table){alert('❌ ไม่พบตารางข้อมูลงบการเงินในหน้านี้ กรุณารอให้ตารางแสดงผลเสร็จสิ้นก่อนครับ');return;}var activeMenu=document.querySelector('.finMenu.active');var sheetType=activeMenu?activeMenu.innerText.trim():'';if(!sheetType){if(table.innerText.includes('สินทรัพย์รวม')){sheetType='งบแสดงฐานะการเงิน';}else if(table.innerText.includes('รายได้รวม')){sheetType='งบกำไรขาดทุน';}else{sheetType='งบการเงิน';}}var headers=[];var headerRows=table.querySelectorAll('thead tr');if(headerRows.length){headerRows.forEach(function(row){var cols=row.querySelectorAll('th, td');cols.forEach(function(col){var text=col.textContent.trim().replace(/\s+/g,'');var match=text.match(/\b\d{4}\b/);if(match){var yr=parseInt(match[0]);if(headers.indexOf(yr)===-1){headers.push(yr);}}});});}var rows=table.querySelectorAll('tbody tr');var currentSheetData={};rows.forEach(function(row){var titleEl=row.querySelector('th, td.text-start, td:nth-child(1)');if(!titleEl)return;var title=titleEl.innerText.trim();var cells=row.querySelectorAll('td');var values=[];cells.forEach(function(cell,idx){if(cell===titleEl)return;var txt=cell.innerText.trim().replace(/,/g,'');var val=parseFloat(txt);if(isNaN(val)){values.push('0.00');}else{values.push(txt);}});if(title){if(values.length){currentSheetData[title]=values;}}});var payload={companyName:companyName,companyId:companyId,years:headers,sheetType:sheetType,data:currentSheetData};var dataStr=JSON.stringify({action:'DBD_SCRAPED',payload:payload});var showToast=function(m){var e=document.createElement('div');e.style.position='fixed';e.style.top='50%';e.style.left='50%';e.style.transform='translate(-50%,-50%)';e.style.backgroundColor='rgba(15,23,42,0.95)';e.style.color='#FFF';e.style.padding='16px 28px';e.style.borderRadius='12px';e.style.boxShadow='0 25px 50px -12px rgba(0,0,0,0.5)';e.style.zIndex='999999';e.style.fontSize='14px';e.style.fontWeight='bold';e.style.fontFamily='sans-serif';e.style.textAlign='center';e.style.transition='opacity 0.4s ease';e.innerText='⚡ ' + m;document.body.appendChild(e);setTimeout(function(){e.style.opacity='0';setTimeout(function(){document.body.removeChild(e);},400);},2000);};navigator.clipboard.writeText(dataStr).then(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! ส่งเข้าส่วนขยายอัตโนมัติแล้ว');}catch(e){showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากดปุ่ม วางข้อมูล');}}else{showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากดปุ่ม วางข้อมูล');}}).catch(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลสำเร็จ แต่คัดลอกไม่ได้');}catch(e){alert('❌ ดึงข้อมูลล้มเหลว');}}else{alert('❌ ไม่พบคลิปบอร์ดและลิงก์เปิด');}});})();" 
+                    <a href="javascript:(function(){var companyNameEl=document.querySelector('h3');var companyIdEl=document.querySelector('h4');var companyName=companyNameEl?companyNameEl.innerText.replace('ชื่อนิติบุคคล :','').trim():'ไม่พบชื่อ';var companyId=companyIdEl?companyIdEl.innerText.replace('เลขทะเบียนนิติบุคคล :','').trim():'0000000000000';var table=document.querySelector('table.table-hover');var activeMenu=document.querySelector('.finMenu.active');var sheetType=activeMenu?activeMenu.innerText.trim():'';if(!sheetType){if(table){if(table.innerText.includes('สินทรัพย์รวม')){sheetType='งบแสดงฐานะการเงิน';}else if(table.innerText.includes('รายได้รวม')){sheetType='งบกำไรขาดทุน';}else{sheetType='งบการเงิน';}}else{sheetType='งบการเงิน';}}var headers=[];var currentSheetData={};if(table){var headerRows=table.querySelectorAll('thead tr');if(headerRows.length){headerRows.forEach(function(row){var cols=row.querySelectorAll('th, td');cols.forEach(function(col){var text=col.textContent.trim().replace(/\s+/g,'');var match=text.match(/\b\d{4}\b/);if(match){var yr=parseInt(match[0]);if(headers.indexOf(yr)===-1){headers.push(yr);}}});});}var rows=table.querySelectorAll('tbody tr');rows.forEach(function(row){var titleEl=row.querySelector('th, td.text-start, td:nth-child(1)');if(!titleEl)return;var title=titleEl.innerText.trim();var cells=row.querySelectorAll('td');var values=[];cells.forEach(function(cell,idx){if(cell===titleEl)return;var txt=cell.innerText.trim().replace(/,/g,'');var val=parseFloat(txt);if(isNaN(val)){values.push('0.00');}else{values.push(txt);}});if(title){if(values.length){currentSheetData[title]=values;}}});}var payload={companyName:companyName,companyId:companyId,years:headers,sheetType:sheetType,data:currentSheetData};var dataStr=JSON.stringify({action:'DBD_SCRAPED',payload:payload});var showToast=function(m){var e=document.createElement('div');e.style.position='fixed';e.style.top='50%';e.style.left='50%';e.style.transform='translate(-50%,-50%)';e.style.backgroundColor='rgba(15,23,42,0.95)';e.style.color='#FFF';e.style.padding='16px 28px';e.style.borderRadius='12px';e.style.boxShadow='0 25px 50px -12px rgba(0,0,0,0.5)';e.style.zIndex='999999';e.style.fontSize='14px';e.style.fontWeight='bold';e.style.fontFamily='sans-serif';e.style.textAlign='center';e.style.transition='opacity 0.4s ease';e.innerText='⚡ ' + m;document.body.appendChild(e);setTimeout(function(){e.style.opacity='0';setTimeout(function(){document.body.removeChild(e);},400);},2000);};navigator.clipboard.writeText(dataStr).then(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! ส่งเข้าส่วนขยายอัตโนมัติแล้ว');}catch(e){showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากดปุ่ม วางข้อมูล');}}else{showToast('ดึงข้อมูลและคัดลอกลงคลิปบอร์ดสำเร็จ! กรุณากดปุ่ม วางข้อมูล');}}).catch(function(){if(window.opener){try{window.opener.postMessage({action:'DBD_SCRAPED',payload:payload},'*');showToast('ดึงข้อมูลสำเร็จ แต่คัดลอกไม่ได้');}catch(e){alert('❌ ดึงข้อมูลล้มเหลว');}}else{alert('❌ ไม่พบคลิปบอร์ดและลิงก์เปิด');}});})();" 
                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition-all inline-flex items-center justify-center gap-1.5 cursor-grab shadow-md select-none text-center animate-pulse"
                        onclick="alert('กรุณาคลิกค้างที่ปุ่มนี้ แล้วลากขึ้นไปวางไว้บน แถบบุ๊กมาร์ก (Bookmarks Bar) ของเบราว์เซอร์ครับ!'); return false;">
                         ➡️ ลากปุ่มนี้ไปวางที่แถบบุ๊กมาร์ก (เวอร์ชันเต็ม) 📊
@@ -252,31 +252,31 @@
                 companyId: "0175546000014",
                 years: [2566, 2567, 2568],
                 balanceSheet: {
-                    "สินทรัพย์หมุนเวียน": ["2,272,302.12", "954,022.38", "797,750.90"],
-                    "เงินสดและรายการเทียบเท่าเงินสด": ["520,000.00", "310,000.00", "150,000.00"],
-                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,200,000.00", "450,000.00", "320,000.00"],
-                    "สินค้าคงเหลือ": ["552,302.12", "194,022.38", "327,750.90"],
-                    "สินทรัพย์ไม่หมุนเวียน": ["4,990,790.99", "4,983,637.57", "4,201,326.07"],
-                    "ที่ดิน อาคารและอุปกรณ์": ["4,500,000.00", "4,500,000.00", "3,900,000.00"],
-                    "สินทรัพย์รวม": ["7,263,093.11", "5,937,659.95", "4,999,076.97"],
-                    "หนี้สินหมุนเวียน": ["2,085,674.17", "2,438,671.71", "3,366,080.09"],
-                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,500,000.00", "1,800,000.00", "2,500,000.00"],
-                    "หนี้สินไม่หมุนเวียน": ["4,690,879.24", "3,293,487.10", "2,099,666.96"],
-                    "หนี้สินรวม": ["6,776,553.41", "5,732,158.81", "5,465,747.05"],
-                    "ส่วนของผู้ถือหุ้น": ["486,539.70", "205,501.14", "-466,670.08"]
+                    "สินทรัพย์หมุนเวียน": ["2,272,302.12", "0.00", "954,022.38", "-58.01", "797,750.90", "-16.38"],
+                    "เงินสดและรายการเทียบเท่าเงินสด": ["520,000.00", "0.00", "310,000.00", "-40.38", "150,000.00", "-51.61"],
+                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,200,000.00", "0.00", "450,000.00", "-62.50", "320,000.00", "-28.89"],
+                    "สินค้าคงเหลือ": ["552,302.12", "0.00", "194,022.38", "-64.87", "327,750.90", "+68.92"],
+                    "สินทรัพย์ไม่หมุนเวียน": ["4,990,790.99", "0.00", "4,983,637.57", "-0.14", "4,201,326.07", "-15.70"],
+                    "ที่ดิน อาคารและอุปกรณ์": ["4,500,000.00", "0.00", "4,500,000.00", "0.00", "3,900,000.00", "-13.33"],
+                    "สินทรัพย์รวม": ["7,263,093.11", "0.00", "5,937,659.95", "-18.25", "4,999,076.97", "-15.81"],
+                    "หนี้สินหมุนเวียน": ["2,085,674.17", "0.00", "2,438,671.71", "+16.92", "3,366,080.09", "+38.03"],
+                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,500,000.00", "0.00", "1,800,000.00", "+20.00", "2,500,000.00", "+38.89"],
+                    "หนี้สินไม่หมุนเวียน": ["4,690,879.24", "0.00", "3,293,487.10", "-29.79", "2,099,666.96", "-36.25"],
+                    "หนี้สินรวม": ["6,776,553.41", "0.00", "5,732,158.81", "-15.41", "5,465,747.05", "-4.65"],
+                    "ส่วนของผู้ถือหุ้น": ["486,539.70", "0.00", "205,501.14", "-57.76", "-466,670.08", "-327.09"]
                 },
                 incomeStatement: {
-                    "รายได้จากการขายและบริการ": ["3,500,000.00", "2,900,000.00", "2,500,000.00"],
-                    "รายได้อื่น": ["355,627.97", "208,311.95", "168,541.33"],
-                    "รายได้รวม": ["3,855,627.97", "3,108,311.95", "2,668,541.33"],
-                    "ต้นทุนขายและบริการ": ["2,100,000.00", "1,850,000.00", "1,600,000.00"],
-                    "กำไรขั้นต้น": ["1,400,000.00", "1,050,000.00", "900,000.00"],
-                    "ค่าใช้จ่ายในการขาย": ["350,000.00", "320,000.00", "280,000.00"],
-                    "ค่าใช้จ่ายในการบริหาร": ["500,000.00", "460,000.00", "400,000.00"],
-                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["850,000.00", "780,000.00", "680,000.00"],
-                    "ต้นทุนทางการเงิน": ["120,000.00", "110,000.00", "105,000.00"],
-                    "ภาษีเงินได้": ["34,331.20", "2,891.47", "60,850.50"],
-                    "กำไร (ขาดทุน) สุทธิ": ["95,296.77", "5,420.48", "-222,690.83"]
+                    "รายได้จากการขายและบริการ": ["3,500,000.00", "0.00", "2,900,000.00", "-17.14", "2,500,000.00", "-13.79"],
+                    "รายได้อื่น": ["355,627.97", "0.00", "208,311.95", "-41.42", "168,541.33", "-19.09"],
+                    "รายได้รวม": ["3,855,627.97", "0.00", "3,108,311.95", "-19.38", "2,668,541.33", "-14.15"],
+                    "ต้นทุนขายและบริการ": ["2,100,000.00", "0.00", "1,850,000.00", "-11.90", "1,600,000.00", "-13.51"],
+                    "กำไรขั้นต้น": ["1,400,000.00", "0.00", "1,050,000.00", "-25.00", "900,000.00", "-14.29"],
+                    "ค่าใช้จ่ายในการขาย": ["350,000.00", "0.00", "320,000.00", "-8.57", "280,000.00", "-12.50"],
+                    "ค่าใช้จ่ายในการบริหาร": ["500,000.00", "0.00", "460,000.00", "-8.00", "400,000.00", "-13.04"],
+                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["850,000.00", "0.00", "780,000.00", "-8.24", "680,000.00", "-12.82"],
+                    "ต้นทุนทางการเงิน": ["120,000.00", "0.00", "110,000.00", "-8.33", "105,000.00", "-4.55"],
+                    "ภาษีเงินได้": ["34,331.20", "0.00", "2,891.47", "-91.58", "60,850.50", "+2004.48"],
+                    "กำไร (ขาดทุน) สุทธิ": ["95,296.77", "0.00", "5,420.48", "-94.31", "-222,690.83", "-4208.31"]
                 }
             },
             {
@@ -284,31 +284,31 @@
                 companyId: "0105553093952",
                 years: [2566, 2567, 2568],
                 balanceSheet: {
-                    "สินทรัพย์หมุนเวียน": ["3,540,000.00", "2,890,000.00", "1,980,000.00"],
-                    "เงินสดและรายการเทียบเท่าเงินสด": ["850,000.00", "520,000.00", "120,000.00"],
-                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,800,000.00", "1,100,000.00", "650,000.00"],
-                    "สินค้าคงเหลือ": ["890,000.00", "1,270,000.00", "1,210,000.00"],
-                    "สินทรัพย์ไม่หมุนเวียน": ["6,200,000.00", "6,100,000.00", "5,800,000.00"],
-                    "ที่ดิน อาคารและอุปกรณ์": ["5,800,000.00", "5,800,000.00", "5,500,000.00"],
-                    "สินทรัพย์รวม": ["9,740,000.00", "8,990,000.00", "7,780,000.00"],
-                    "หนี้สินหมุนเวียน": ["2,800,000.00", "3,100,000.00", "4,200,000.00"],
-                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,900,000.00", "2,200,000.00", "3,100,000.00"],
-                    "หนี้สินไม่หมุนเวียน": ["4,800,000.00", "3,500,000.00", "2,200,000.00"],
-                    "หนี้สินรวม": ["7,600,000.00", "6,600,000.00", "6,400,000.00"],
-                    "ส่วนของผู้ถือหุ้น": ["2,140,000.00", "2,390,000.00", "1,380,000.00"]
+                    "สินทรัพย์หมุนเวียน": ["3,540,000.00", "0.00", "2,890,000.00", "-18.36", "1,980,000.00", "-31.49"],
+                    "เงินสดและรายการเทียบเท่าเงินสด": ["850,000.00", "0.00", "520,000.00", "-38.82", "120,000.00", "-76.92"],
+                    "ลูกหนี้การค้าและลูกหนี้อื่น": ["1,800,000.00", "0.00", "1,100,000.00", "-38.89", "650,000.00", "-40.91"],
+                    "สินค้าคงเหลือ": ["890,000.00", "0.00", "1,270,000.00", "+42.70", "1,210,000.00", "-4.72"],
+                    "สินทรัพย์ไม่หมุนเวียน": ["6,200,000.00", "0.00", "6,100,000.00", "-1.61", "5,800,000.00", "-4.92"],
+                    "ที่ดิน อาคารและอุปกรณ์": ["5,800,000.00", "0.00", "5,800,000.00", "0.00", "5,500,000.00", "-5.17"],
+                    "สินทรัพย์รวม": ["9,740,000.00", "0.00", "8,990,000.00", "-7.70", "7,780,000.00", "-13.46"],
+                    "หนี้สินหมุนเวียน": ["2,800,000.00", "0.00", "3,100,000.00", "+10.71", "4,200,000.00", "+35.48"],
+                    "เจ้าหนี้การค้าและเจ้าหนี้อื่น": ["1,900,000.00", "0.00", "2,200,000.00", "+15.79", "3,100,000.00", "+40.91"],
+                    "หนี้สินไม่หมุนเวียน": ["4,800,000.00", "0.00", "3,500,000.00", "-27.08", "2,200,000.00", "-37.14"],
+                    "หนี้สินรวม": ["7,600,000.00", "0.00", "6,600,000.00", "-13.16", "6,400,000.00", "-3.03"],
+                    "ส่วนของผู้ถือหุ้น": ["2,140,000.00", "0.00", "2,390,000.00", "+11.68", "1,380,000.00", "-42.26"]
                 },
                 incomeStatement: {
-                    "รายได้จากการขายและบริการ": ["6,800,000.00", "5,900,000.00", "4,200,000.00"],
-                    "รายได้อื่น": ["420,000.00", "350,000.00", "280,000.00"],
-                    "รายได้รวม": ["7,220,000.00", "6,250,000.00", "4,480,000.00"],
-                    "ต้นทุนขายและบริการ": ["4,100,000.00", "3,800,000.00", "3,200,000.00"],
-                    "กำไรขั้นต้น": ["3,120,000.00", "2,450,000.00", "1,280,000.00"],
-                    "ค่าใช้จ่ายในการขาย": ["850,000.00", "780,000.00", "650,000.00"],
-                    "ค่าใช้จ่ายในการบริหาร": ["1,200,000.00", "1,150,000.00", "950,000.00"],
-                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["2,050,000.00", "1,930,000.00", "1,600,000.00"],
-                    "ต้นทุนทางการเงิน": ["280,000.00", "240,000.00", "210,000.00"],
-                    "ภาษีเงินได้": ["158,000.00", "56,000.00", "-106,000.00"],
-                    "กำไร (ขาดทุน) สุทธิ": ["632,000.00", "224,000.00", "-424,000.00"]
+                    "รายได้จากการขายและบริการ": ["6,800,000.00", "0.00", "5,900,000.00", "-13.24", "4,200,000.00", "-28.81"],
+                    "รายได้อื่น": ["420,000.00", "0.00", "350,000.00", "-16.67", "280,000.00", "-20.00"],
+                    "รายได้รวม": ["7,220,000.00", "0.00", "6,250,000.00", "-13.43", "4,480,000.00", "-28.32"],
+                    "ต้นทุนขายและบริการ": ["4,100,000.00", "0.00", "3,800,000.00", "-7.32", "3,200,000.00", "-15.79"],
+                    "กำไรขั้นต้น": ["3,120,000.00", "0.00", "2,450,000.00", "-21.47", "1,280,000.00", "-47.76"],
+                    "ค่าใช้จ่ายในการขาย": ["850,000.00", "0.00", "780,000.00", "-8.24", "650,000.00", "-16.67"],
+                    "ค่าใช้จ่ายในการบริหาร": ["1,200,000.00", "0.00", "1,150,000.00", "-4.17", "950,000.00", "-17.39"],
+                    "รวมค่าใช้จ่ายในการขายและบริหาร": ["2,050,000.00", "0.00", "1,930,000.00", "-5.85", "1,600,000.00", "-17.10"],
+                    "ต้นทุนทางการเงิน": ["280,000.00", "0.00", "240,000.00", "-14.29", "210,000.00", "-12.50"],
+                    "ภาษีเงินได้": ["158,000.00", "0.00", "56,000.00", "-64.56", "-106,000.00", "-289.29"],
+                    "กำไร (ขาดทุน) สุทธิ": ["632,000.00", "0.00", "224,000.00", "-64.56", "-424,000.00", "-289.29"]
                 }
             }
         ];
@@ -383,6 +383,16 @@
 
                     let sheet = payload.sheetType || "";
                     const dataKeys = Object.keys(payload.data || {});
+                    const isEmptyCompany = ((payload.years || []).length === 0 && dataKeys.length === 0);
+
+                    if (isEmptyCompany) {
+                        activeJob.balanceSheet = {};
+                        activeJob.incomeStatement = {};
+                        saveJobToDatabase();
+                        showFloatingToast("⚠️ เชื่อมต่อข้อมูลบริษัทเปิดใหม่/ไม่มีงบการเงินเรียบร้อย");
+                        return;
+                    }
+
                     if (dataKeys.some(k => k.includes("สินทรัพย์") || k.includes("หนี้สิน") || k.includes("ผู้ถือหุ้น") || k.includes("ดุล"))) {
                         sheet = "balanceSheet";
                     } else if (dataKeys.some(k => k.includes("รายได้") || k.includes("กำไร") || k.includes("ขาดทุน") || k.includes("ต้นทุน") || k.includes("ค่าใช้จ่าย"))) {
@@ -737,13 +747,23 @@
                 const data = JSON.parse(text);
                 const payload = data.payload || data;
                 
-                if (payload && (payload.companyId && payload.sheetType)) {
+                if (payload && payload.companyId) {
                     activeJob.companyId = payload.companyId;
                     activeJob.companyName = payload.companyName;
-                    activeJob.years = payload.years;
+                    activeJob.years = payload.years || [];
                     
                     let sheet = payload.sheetType || "";
                     const dataKeys = Object.keys(payload.data || {});
+                    const isEmptyCompany = (activeJob.years.length === 0 && dataKeys.length === 0);
+
+                    if (isEmptyCompany) {
+                        activeJob.balanceSheet = {};
+                        activeJob.incomeStatement = {};
+                        saveJobToDatabase();
+                        showFloatingToast("⚠️ วางข้อมูลบริษัทเปิดใหม่/ไม่มีงบการเงินเรียบร้อย");
+                        return;
+                    }
+
                     if (dataKeys.some(k => k.includes("สินทรัพย์") || k.includes("หนี้สิน") || k.includes("ผู้ถือหุ้น") || k.includes("ดุล"))) {
                         sheet = "balanceSheet";
                     } else if (dataKeys.some(k => k.includes("รายได้") || k.includes("กำไร") || k.includes("ขาดทุน") || k.includes("ต้นทุน") || k.includes("ค่าใช้จ่าย"))) {
@@ -778,12 +798,13 @@
                 const li = document.createElement("li");
                 li.className = "p-2.5 hover:bg-slate-50 cursor-pointer transition-colors flex justify-between items-center";
                 li.setAttribute("onclick", `loadCompanyData('${item.companyId}')`);
+                const displayYear = (item.years && item.years.length > 0) ? item.years[item.years.length - 1] : "ไม่มีงบ";
                 li.innerHTML = `
                     <div class="truncate max-w-[260px]">
                         <div class="font-bold text-slate-800 truncate">${item.companyName}</div>
                         <div class="text-[10px] text-slate-400 font-mono">ID: ${item.companyId}</div>
                     </div>
-                    <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">${item.years[item.years.length-1]}</span>
+                    <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">${displayYear}</span>
                 `;
                 container.appendChild(li);
             });
