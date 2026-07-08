@@ -17,14 +17,14 @@
         .financial-table th {
             background-color: #0f172a;
             color: #ffffff;
-            font-size: 9px;
-            padding: 4px 6px;
+            font-size: 8px;
+            padding: 3px 3px;
             border: 1px solid #cbd5e1;
             text-align: center;
         }
         .financial-table td {
-            font-size: 9px;
-            padding: 3px 6px;
+            font-size: 8px;
+            padding: 2px 3px;
             border: 1px solid #cbd5e1;
             text-align: right;
         }
@@ -32,7 +32,7 @@
             text-align: left;
             font-weight: 600;
             background-color: #f8fafc;
-            font-size: 9px;
+            font-size: 8px;
             line-height: 1.2;
             white-space: normal;
             word-break: break-word;
@@ -55,7 +55,7 @@
                 overflow: visible !important;
                 height: auto !important;
             }
-            header, aside, button, .no-print {
+            header, aside, [class*="w-[420px]"], button, input, .no-print {
                 display: none !important;
             }
             main {
@@ -218,7 +218,7 @@
         </aside>
 
         <main class="flex-1 p-8 overflow-y-auto flex justify-center items-start bg-slate-100">
-            <div id="printArea" class="print-container bg-white shadow-2xl p-[12mm] border border-slate-300 w-[210mm] min-h-[297mm] box-border flex flex-col justify-between">
+            <div id="printArea" class="print-container bg-white shadow-2xl p-[6mm] border border-slate-300 w-[210mm] min-h-[297mm] box-border flex flex-col justify-between">
                 <div class="flex flex-col gap-5">
                     
                     <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-end">
@@ -483,15 +483,15 @@
             const years = comp.years && comp.years.length > 0 ? comp.years : [2562, 2563, 2564, 2565, 2566];
             
             // Build Table Headers dynamically
-            let headerHtml = `<tr><th rowspan="2" class="text-left py-2 px-3 align-middle bg-slate-900 text-white font-bold border border-slate-700 min-w-[140px] w-[22%]">รายการแถวตรวจงบฉบับเต็ม</th>`;
+            let headerHtml = `<tr><th rowspan="2" class="text-left py-2 px-3 align-middle bg-slate-900 text-white font-bold border border-slate-700 min-w-[120px] w-[20%]">รายการแถวตรวจงบฉบับเต็ม</th>`;
             years.forEach((yr, idx) => {
                 headerHtml += `<th colspan="2" class="text-center py-1 bg-slate-900 text-white font-bold border border-slate-700">ปี พ.ศ. ${yr}</th>`;
             });
             headerHtml += `</tr><tr>`;
             years.forEach((yr, idx) => {
                 headerHtml += `
-                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[10%]">จำนวนเงิน</th>
-                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[5.6%]">%</th>
+                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[9.6%]">จำนวนเงิน</th>
+                    <th class="text-center py-1 text-[9px] bg-slate-800 text-slate-200 border border-slate-700 w-[6.4%]">%</th>
                 `;
             });
             headerHtml += `</tr>`;
