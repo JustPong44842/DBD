@@ -53,9 +53,24 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 overflow: visible !important;
+                height: auto !important;
             }
             .no-print {
                 display: none !important;
+            }
+            main {
+                background: none !important;
+                background-color: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+            .flex, .flex-1 {
+                display: block !important;
+                height: auto !important;
             }
             @page {
                 size: A4 portrait;
@@ -69,6 +84,7 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 display: block !important;
+                background-color: #ffffff !important;
             }
             .table-section {
                 page-break-inside: auto !important;
@@ -108,9 +124,9 @@
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden no-print">
+    <div class="flex flex-1 overflow-hidden">
         
-        <aside class="w-[420px] bg-white border-r border-slate-200 flex flex-col justify-between shrink-0">
+        <aside class="w-[420px] bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 no-print">
             <div class="p-5 flex flex-col gap-4 overflow-y-auto">
                 
                 <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 shadow-sm animate-fade-in">
