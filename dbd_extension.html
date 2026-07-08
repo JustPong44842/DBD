@@ -45,88 +45,88 @@
             font-weight: bold;
         }
 
-        /* ตกแต่งเลย์เอาต์ตอนสั่งพิมพ์ออกกระดาษ A4 แนวตั้ง */
-        @media print {
-            body {
-                background: none !important;
-                background-color: #ffffff !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                overflow: visible !important;
-                height: auto !important;
-            }
-            header, aside, button, input, .no-print {
-                display: none !important;
-            }
-            main {
-                background: none !important;
-                background-color: #ffffff !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                overflow: visible !important;
-                display: block !important;
-                width: 100% !important;
-                height: auto !important;
-            }
-            .flex, .flex-1 {
-                display: block !important;
-                height: auto !important;
-            }
-            @page {
-                size: A4 portrait;
-                margin: 6mm 6mm 6mm 6mm;
-            }
-            .print-container {
-                width: 100% !important;
-                max-width: 100% !important;
-                border: none !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
-                height: 100% !important;
-                background-color: #ffffff !important;
-                box-sizing: border-box !important;
-            }
-            .table-section {
-                page-break-inside: avoid !important;
-                margin-bottom: 4px !important;
-            }
-            .financial-table tr {
-                page-break-inside: avoid !important;
-                page-break-after: auto !important;
-            }
-            .financial-table {
-                table-layout: fixed !important;
-                width: 100% !important;
-            }
-            .financial-table th {
-                background-color: #0f172a !important;
-                color: #ffffff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                font-size: 7px !important;
-                padding: 2px 1px !important;
-            }
-            .financial-table td {
-                font-size: 7px !important;
-                padding: 1.5px 2px !important;
-            }
-            .financial-table .row-title {
-                background-color: #f1f5f9 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                font-size: 7px !important;
-            }
-            #riskAlertBox {
-                margin-bottom: 4px !important;
-                padding: 4px 8px !important;
-            }
-            #riskAlertBox p, #riskAlertBox li {
-                font-size: 8px !important;
-            }
+    </style>
+
+    <style media="print">
+        body {
+            background: none !important;
+            background-color: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: visible !important;
+            height: auto !important;
+        }
+        header, aside, button, input, .no-print {
+            display: none !important;
+        }
+        main {
+            background: none !important;
+            background-color: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: visible !important;
+            display: block !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+        .flex, .flex-1 {
+            display: block !important;
+            height: auto !important;
+        }
+        @page {
+            size: A4 portrait;
+            margin: 6mm 6mm 6mm 6mm;
+        }
+        .print-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100% !important;
+            background-color: #ffffff !important;
+            box-sizing: border-box !important;
+        }
+        .table-section {
+            page-break-inside: avoid !important;
+            margin-bottom: 4px !important;
+        }
+        .financial-table tr {
+            page-break-inside: avoid !important;
+            page-break-after: auto !important;
+        }
+        .financial-table {
+            table-layout: fixed !important;
+            width: 100% !important;
+        }
+        .financial-table th {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 7px !important;
+            padding: 2px 1px !important;
+        }
+        .financial-table td {
+            font-size: 7px !important;
+            padding: 1.5px 2px !important;
+        }
+        .financial-table .row-title {
+            background-color: #f1f5f9 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 7px !important;
+        }
+        #riskAlertBox {
+            margin-bottom: 4px !important;
+            padding: 4px 8px !important;
+        }
+        #riskAlertBox p, #riskAlertBox li {
+            font-size: 8px !important;
         }
     </style>
 </head>
@@ -136,7 +136,7 @@
         <div class="flex items-center gap-3">
             <span class="text-2xl">📊</span>
             <div>
-                <h1 class="text-base font-bold leading-tight">DBD Financial Hub <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded ml-2 font-normal">v2.0.2 Full-Scale (Print Fix Enabled)</span></h1>
+                <h1 class="text-base font-bold leading-tight">DBD Financial Hub <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded ml-2 font-normal">v2.0.3 Full-Scale (Print Fix Enabled)</span></h1>
                 <p class="text-[10px] text-slate-400">ระบบดึงรายงานงบการเงินตัวเต็มและประเมินความเสี่ยงอัตโนมัติ รองรับตารางยาวแบบไดนามิก</p>
             </div>
         </div>
