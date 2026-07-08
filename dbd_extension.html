@@ -55,7 +55,7 @@
                 overflow: visible !important;
                 height: auto !important;
             }
-            .no-print {
+            header, aside, button, .no-print {
                 display: none !important;
             }
             main {
@@ -74,7 +74,7 @@
             }
             @page {
                 size: A4 portrait;
-                margin: 8mm 6mm 8mm 6mm;
+                margin: 6mm 6mm 6mm 6mm;
             }
             .print-container {
                 width: 100% !important;
@@ -83,11 +83,16 @@
                 box-shadow: none !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                display: block !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                height: 100% !important;
                 background-color: #ffffff !important;
+                box-sizing: border-box !important;
             }
             .table-section {
-                page-break-inside: auto !important;
+                page-break-inside: avoid !important;
+                margin-bottom: 4px !important;
             }
             .financial-table tr {
                 page-break-inside: avoid !important;
@@ -98,18 +103,25 @@
                 color: #ffffff !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                font-size: 7.5px !important;
-                padding: 3px 1px !important;
+                font-size: 7px !important;
+                padding: 2px 1px !important;
             }
             .financial-table td {
-                font-size: 7.5px !important;
-                padding: 2.5px 2px !important;
+                font-size: 7px !important;
+                padding: 1.5px 2px !important;
             }
             .financial-table .row-title {
                 background-color: #f1f5f9 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                font-size: 7.5px !important;
+                font-size: 7px !important;
+            }
+            #riskAlertBox {
+                margin-bottom: 4px !important;
+                padding: 4px 8px !important;
+            }
+            #riskAlertBox p, #riskAlertBox li {
+                font-size: 8px !important;
             }
         }
     </style>
